@@ -12,9 +12,15 @@ The tool examines your staged and unstaged changes, sends a summary to Claude CL
 **Yes, by default Claude Auto-Commit will:**
 1. Stage all changes (`git add -A`)
 2. Create a commit with the generated message
-3. Push to the remote repository
+3. **Ask for confirmation before pushing** (NEW in v0.0.2)
+4. Push to the remote repository if confirmed
 
-To disable auto-push, use the `-n` or `--no-push` flag:
+To skip the push confirmation prompt, use the `-y` or `--yes` flag:
+```bash
+claude-auto-commit -y
+```
+
+To disable auto-push entirely, use the `-n` or `--no-push` flag:
 ```bash
 claude-auto-commit -n
 ```

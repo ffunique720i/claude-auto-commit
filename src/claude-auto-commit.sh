@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Claude Auto-Commit - AI-powered Git commit message generator
-# Version: 0.0.1
+# Version: 0.0.2
 # Homepage: https://claude-auto-commit.0xkaz.com
 
-VERSION="0.0.1"
+VERSION="0.0.2"
 REPO="0xkaz/claude-auto-commit"
 CONFIG_DIR="$HOME/.claude-auto-commit"
 CONFIG_FILE="$CONFIG_DIR/config.yml"
@@ -20,6 +20,7 @@ AUTO_STAGE=true
 VERBOSE=false
 AUTO_UPDATE=true
 UPDATE_FREQUENCY="daily"
+SKIP_PUSH_CONFIRM=false
 
 # 使用方法を表示
 usage() {
@@ -38,6 +39,7 @@ usage() {
     -v, --verbose              詳細な出力を表示
     -c, --conventional         Conventional Commits形式を使用
     -p, --prefix <prefix>      カスタムプレフィックス（例: [WIP], [HOTFIX]）
+    -y, --yes                  プッシュ前の確認をスキップ
     --update                   今すぐ更新チェック
     --no-update                今回は更新をスキップ
     --version                  バージョン情報を表示
@@ -222,6 +224,10 @@ while [[ $# -gt 0 ]]; do
         -p|--prefix)
             PREFIX="$2"
             shift 2
+            ;;
+        -y|--yes)
+            SKIP_PUSH_CONFIRM=true
+            shift
             ;;
         --update)
             # 強制更新
@@ -421,6 +427,19 @@ case $REPLY in
             
             # 自動プッシュが有効な場合
             if [ "$AUTO_PUSH" = true ]; then
+                # プッシュ前の確認
+                if [ "$SKIP_PUSH_CONFIRM" = false ]; then
+                    echo
+                    print_warning "リモートリポジトリ（$BRANCH ブランチ）にプッシュしようとしています"
+                    read -p "プッシュを続行しますか？ (y/n): " -r PUSH_REPLY
+                    echo
+                    
+                    if [[ ! $PUSH_REPLY =~ ^[Yy]$ ]]; then
+                        print_info "プッシュをスキップしました。手動でプッシュしてください: git push origin $BRANCH"
+                        exit 0
+                    fi
+                fi
+                
                 print_info "$BRANCH ブランチにプッシュ中..."
                 git push origin "$BRANCH"
                 
