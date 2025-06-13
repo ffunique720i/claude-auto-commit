@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Claude Auto-Commit - AI-powered Git commit message generator
-# Version: 0.2.0
+# Version: 0.0.3
 # Homepage: https://claude-auto-commit.0xkaz.com
 
-VERSION="0.2.0"
+VERSION="0.0.3"
 REPO="0xkaz/claude-auto-commit"
 CONFIG_DIR="$HOME/.claude-auto-commit"
 CONFIG_FILE="$CONFIG_DIR/config.yml"

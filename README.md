@@ -178,8 +178,9 @@ git:
   auto_push: true
 ```
 
-## 🚀 What's New in v0.1.0
+## 🚀 What's New in v0.0.3
 
+- **English Default**: All messages and prompts now in English (Japanese available with `-l ja`)
 - **Dry Run Mode**: Preview commit messages without committing using `--dry-run`
 - **Change Summary**: Get detailed statistics about your changes with `--summary`
 - **Push Confirmation**: Now prompts before pushing (use `-y` to skip)
