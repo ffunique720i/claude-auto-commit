@@ -42,6 +42,8 @@ claude-auto-commit -l en -e -t feat
 - 🎯 **Smart Detection**: Analyzes file types, change patterns, and project context
 - 🔍 **Dry Run Mode**: Preview commit messages without making actual commits
 - 📋 **Change Summary**: Detailed statistics about your changes (lines added/deleted, file types)
+- 🧠 **Commit Learning**: Analyze your commit history to maintain consistent style
+- 🎯 **Smart Grouping**: Intelligently categorize files for logical commits
 - ⚡ **Lightweight**: Shell script with minimal dependencies
 - 🛠️ **Configurable**: Extensive customization through CLI options and config files
 
@@ -178,12 +180,12 @@ git:
   auto_push: true
 ```
 
-## 🚀 What's New in v0.0.3
+## 🚀 What's New in v0.0.4
 
-- **English Default**: All messages and prompts now in English (Japanese available with `-l ja`)
-- **Dry Run Mode**: Preview commit messages without committing using `--dry-run`
-- **Change Summary**: Get detailed statistics about your changes with `--summary`
-- **Push Confirmation**: Now prompts before pushing (use `-y` to skip)
+- **Smart Grouping**: Analyze and categorize files for logical commits with `--smart-group`
+- **Commit History Learning**: Learn from your project's commit style with `--analyze-history`
+- **Learned Style**: Apply analyzed patterns to new commits with `--style learned`
+- **macOS Compatibility**: Fixed compatibility issues for macOS users
 
 ## 🤝 Contributing
 

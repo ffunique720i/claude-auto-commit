@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4] - 2024-06-13
+
+### Added
+- `--smart-group` flag to analyze and group related files for logical commits
+  - Detects frontend, backend, tests, docs, config, and style files
+  - Shows file categories and statistics
+  - Supports verbose mode for detailed file listings
+- `--analyze-history` command to learn from commit history
+  - Analyzes emoji usage patterns
+  - Calculates average commit message length
+  - Detects common commit prefixes
+  - Identifies language preferences
+  - Saves results to `~/.claude-auto-commit/commit-style.yml`
+- `--style learned` option to apply learned commit patterns
+  - Uses analyzed emoji usage percentage
+  - Targets learned average message length
+  - Automatically enables emoji if usage > 50%
+
+### Fixed
+- macOS compatibility for grep commands (removed -P flag)
+- Bash 3.x compatibility (removed associative arrays)
+
 ## [0.0.3] - 2024-06-13
 
 ### Added

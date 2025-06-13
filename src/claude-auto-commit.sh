@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Claude Auto-Commit - AI-powered Git commit message generator
-# Version: 0.0.3
+# Version: 0.0.4
 # Homepage: https://claude-auto-commit.0xkaz.com
 
-VERSION="0.0.3"
+VERSION="0.0.4"
 REPO="0xkaz/claude-auto-commit"
 CONFIG_DIR="$HOME/.claude-auto-commit"
 CONFIG_FILE="$CONFIG_DIR/config.yml"
@@ -23,6 +23,9 @@ UPDATE_FREQUENCY="daily"
 SKIP_PUSH_CONFIRM=false
 DRY_RUN=false
 SHOW_SUMMARY=false
+SMART_GROUP=false
+ANALYZE_HISTORY=false
+USE_LEARNED_STYLE=false
 
 # Display usage information
 usage() {
@@ -44,6 +47,9 @@ Options:
     -y, --yes                  Skip push confirmation
     --dry-run                  Generate message only (no commit)
     --summary                  Show detailed change summary
+    --smart-group              Group related files into logical commits
+    --analyze-history          Analyze commit history to learn patterns
+    --style learned            Use learned commit style from history
     --update                   Check for updates now
     --no-update                Skip update check
     --version                  Show version information
@@ -54,6 +60,8 @@ Examples:
     $(basename $0) -m "Custom message" -n
     $(basename $0) -c -t fix -l en
     $(basename $0) --dry-run  # Generate message only
+    $(basename $0) --smart-group  # Group related files
+    $(basename $0) --analyze-history  # Learn from commit history
 EOF
 }
 
@@ -242,6 +250,20 @@ while [[ $# -gt 0 ]]; do
             SHOW_SUMMARY=true
             shift
             ;;
+        --smart-group)
+            SMART_GROUP=true
+            shift
+            ;;
+        --analyze-history)
+            ANALYZE_HISTORY=true
+            shift
+            ;;
+        --style)
+            if [ "$2" = "learned" ]; then
+                USE_LEARNED_STYLE=true
+            fi
+            shift 2
+            ;;
         --update)
             # Force update
             AUTO_UPDATE=true
@@ -285,6 +307,64 @@ if ! git rev-parse --git-dir > /dev/null 2>&1; then
     exit 1
 fi
 
+# Analyze commit history if requested
+if [ "$ANALYZE_HISTORY" = true ]; then
+    print_info "Analyzing commit history..."
+    
+    # Get recent commits (last 100)
+    COMMIT_COUNT=$(git rev-list --count HEAD 2>/dev/null || echo 0)
+    ANALYZE_COUNT=$((COMMIT_COUNT > 100 ? 100 : COMMIT_COUNT))
+    
+    if [ "$COMMIT_COUNT" -eq 0 ]; then
+        print_error "No commits found in repository"
+        exit 1
+    fi
+    
+    # Analyze patterns
+    echo
+    print_info "📊 Commit History Analysis (last $ANALYZE_COUNT commits)"
+    echo
+    
+    # Emoji usage
+    EMOJI_COUNT=$(git log --oneline -n $ANALYZE_COUNT | grep -E "^[a-f0-9]+ [🎯🚀💡🔧🐛📝✨🎨⚡️🔥💄🎉✅🚧🚨♻️➕➖🔀📦🍱🏷️🌐💬🗃️🔊🔇📱💻🎨⚗️🔍🥅🩹🔨📌⬆️⬇️]" | wc -l)
+    EMOJI_PERCENT=$((EMOJI_COUNT * 100 / ANALYZE_COUNT))
+    echo "  📊 Emoji usage: $EMOJI_PERCENT% ($EMOJI_COUNT/$ANALYZE_COUNT commits)"
+    
+    # Average message length
+    AVG_LENGTH=$(git log --oneline -n $ANALYZE_COUNT | awk '{$1=""; print length($0)}' | awk '{sum+=$1} END {print int(sum/NR)}')
+    echo "  📏 Average message length: $AVG_LENGTH characters"
+    
+    # Common prefixes
+    echo "  🏷️ Common prefixes:"
+    git log --oneline -n $ANALYZE_COUNT | sed 's/^[a-f0-9]* //' | grep -oE "^(feat|fix|docs|style|refactor|test|chore|build|ci|perf|revert|wip|hotfix|release):" | sort | uniq -c | sort -rn | head -5 | while read count prefix; do
+        echo "     $prefix $count times"
+    done
+    
+    # Language detection (simplified for macOS compatibility)
+    echo "  🌐 Detected languages:"
+    # For macOS, use a simpler approach
+    JAPANESE_COUNT=$(git log --oneline -n $ANALYZE_COUNT | grep -E "[ぁ-んァ-ヶー一-龠]" | wc -l | tr -d ' ')
+    ENGLISH_COUNT=$((ANALYZE_COUNT - JAPANESE_COUNT))
+    [ "$JAPANESE_COUNT" -gt 0 ] && echo "     Japanese: $((JAPANESE_COUNT * 100 / ANALYZE_COUNT))% ($JAPANESE_COUNT commits)"
+    [ "$ENGLISH_COUNT" -gt 0 ] && echo "     English: $((ENGLISH_COUNT * 100 / ANALYZE_COUNT))% ($ENGLISH_COUNT commits)"
+    
+    # Save analysis results
+    cat > "$CONFIG_DIR/commit-style.yml" << EOF
+# Learned commit style from history analysis
+commit_style:
+  emoji_usage: $EMOJI_PERCENT
+  average_length: $AVG_LENGTH
+  analyzed_commits: $ANALYZE_COUNT
+  analysis_date: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+EOF
+    
+    echo
+    print_success "Analysis complete! Results saved to $CONFIG_DIR/commit-style.yml"
+    echo
+    print_info "Use '--style learned' to apply these patterns to new commits"
+    exit 0
+fi
+
 # Get current branch
 CURRENT_BRANCH=$(git branch --show-current)
 print_info "Current branch: $CURRENT_BRANCH"
@@ -310,6 +390,62 @@ print_info "Change summary:"
 echo "  Staged: $STAGED_COUNT files"
 echo "  Unstaged: $UNSTAGED_COUNT files"
 echo "  Untracked: $UNTRACKED_COUNT files"
+
+# Smart grouping if requested
+if [ "$SMART_GROUP" = true ]; then
+    echo
+    print_info "🎯 Analyzing file changes for logical grouping..."
+    
+    # Get all changed files
+    ALL_CHANGED_FILES=$(git diff --name-only; git diff --cached --name-only; git ls-files --others --exclude-standard)
+    
+    # Analyze file patterns (simplified for compatibility)
+    echo
+    print_info "File categories detected:"
+    
+    # Frontend/JS files
+    FRONTEND_FILES=$(echo "$ALL_CHANGED_FILES" | grep -E "^(src|lib|app)/.*\.(js|ts|jsx|tsx)$" | wc -l | tr -d ' ')
+    [ "$FRONTEND_FILES" -gt 0 ] && echo "  🎯 Frontend/Application: $FRONTEND_FILES files"
+    
+    # Backend files
+    BACKEND_FILES=$(echo "$ALL_CHANGED_FILES" | grep -E "^(api|server|backend)/.*" | wc -l | tr -d ' ')
+    [ "$BACKEND_FILES" -gt 0 ] && echo "  🔧 Backend/API: $BACKEND_FILES files"
+    
+    # Test files
+    TEST_FILES=$(echo "$ALL_CHANGED_FILES" | grep -E "^(test|spec|__tests__)/.*" | wc -l | tr -d ' ')
+    [ "$TEST_FILES" -gt 0 ] && echo "  🧪 Tests: $TEST_FILES files"
+    
+    # Documentation
+    DOC_FILES=$(echo "$ALL_CHANGED_FILES" | grep -E "^(docs?|README|CONTRIBUTING|CHANGELOG)" | wc -l | tr -d ' ')
+    [ "$DOC_FILES" -gt 0 ] && echo "  📖 Documentation: $DOC_FILES files"
+    
+    # Config files
+    CONFIG_FILES=$(echo "$ALL_CHANGED_FILES" | grep -E "^(\.github|\.gitlab|\.|config)" | wc -l | tr -d ' ')
+    [ "$CONFIG_FILES" -gt 0 ] && echo "  ⚙️ Configuration: $CONFIG_FILES files"
+    
+    # Style files
+    STYLE_FILES=$(echo "$ALL_CHANGED_FILES" | grep -E "\.(css|scss|sass|less|styl)$" | wc -l | tr -d ' ')
+    [ "$STYLE_FILES" -gt 0 ] && echo "  🎨 Styles: $STYLE_FILES files"
+    
+    if [ "$VERBOSE" = true ]; then
+        echo
+        echo "  Files by directory:"
+        echo "$ALL_CHANGED_FILES" | cut -d'/' -f1 | sort | uniq -c | sort -rn | head -10 | while read count dir; do
+            [ -n "$dir" ] && echo "    $dir/: $count files"
+        done
+    fi
+    
+    echo
+    read -p "Select groups to commit (e.g., 1,3 or 'all' or 'skip'): " -r GROUP_SELECTION
+    
+    if [ "$GROUP_SELECTION" = "skip" ]; then
+        print_info "Smart grouping skipped. Proceeding with normal commit..."
+    elif [ "$GROUP_SELECTION" != "all" ] && [ -n "$GROUP_SELECTION" ]; then
+        # TODO: Implement selective group commit
+        print_warning "Selective group commit not yet implemented. Proceeding with all changes..."
+    fi
+    echo
+fi
 
 # Show detailed summary
 if [ "$SHOW_SUMMARY" = true ]; then
@@ -391,6 +527,24 @@ The commit message should be concise and capture the essence of the changes."
     else
         PROMPT="Generate an appropriate commit message in Japanese based on the following Git changes.
 The commit message should be concise and capture the essence of the changes."
+    fi
+
+    # Apply learned style if requested
+    if [ "$USE_LEARNED_STYLE" = true ] && [ -f "$CONFIG_DIR/commit-style.yml" ]; then
+        # Read learned style
+        LEARNED_EMOJI=$(grep "emoji_usage:" "$CONFIG_DIR/commit-style.yml" | awk '{print $2}')
+        LEARNED_LENGTH=$(grep "average_length:" "$CONFIG_DIR/commit-style.yml" | awk '{print $2}')
+        
+        PROMPT="$PROMPT
+
+Based on commit history analysis:
+- Use emoji in ${LEARNED_EMOJI}% of cases
+- Target message length: around ${LEARNED_LENGTH} characters"
+        
+        # Override emoji setting based on learned pattern
+        if [ "$LEARNED_EMOJI" -gt 50 ]; then
+            USE_EMOJI=true
+        fi
     fi
 
     # Emoji settings

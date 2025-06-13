@@ -133,10 +133,43 @@ Add to your `.gitconfig`:
 ### Pre-commit Hook
 Coming soon: Automatic message generation as a git hook.
 
+## New Features (v0.0.4)
+
+### 🧠 Commit History Learning
+Analyze your project's commit history to maintain consistent style:
+```bash
+# Analyze last 100 commits
+claude-auto-commit --analyze-history
+
+# Output:
+# 📊 Emoji usage: 76% (76/100 commits)
+# 📏 Average message length: 52 characters
+# 🏷️ Common prefixes: feat:, fix:, docs:
+# 🌐 Detected languages: English 85%, Japanese 15%
+```
+
+### 🎯 Smart File Grouping
+Intelligently categorize changed files:
+```bash
+claude-auto-commit --smart-group
+
+# Output:
+# File categories detected:
+#   🎯 Frontend/Application: 3 files
+#   🔧 Backend/API: 2 files
+#   📖 Documentation: 1 file
+```
+
+### 📊 Learned Style Application
+Apply analyzed patterns to new commits:
+```bash
+# Use learned commit style
+claude-auto-commit --style learned
+```
+
 ## Upcoming Features
 
 - 📝 **Template System**: Save and reuse common commit message patterns
-- 🧠 **Learning Mode**: Analyze your commit history to match your style
 - ✂️ **Split Commits**: Break large changes into logical commits
 - 🔧 **Selective Analysis**: Filter files to include/exclude from analysis
 - 🔗 **Git Hook Integration**: Automatic message generation on commit
