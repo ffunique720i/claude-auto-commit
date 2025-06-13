@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Claude Auto-Commit - AI-powered Git commit message generator
-# Version: 0.0.2
+# Version: 0.1.0
 # Homepage: https://claude-auto-commit.0xkaz.com
 
-VERSION="0.0.2"
+VERSION="0.1.0"
 REPO="0xkaz/claude-auto-commit"
 CONFIG_DIR="$HOME/.claude-auto-commit"
 CONFIG_FILE="$CONFIG_DIR/config.yml"
@@ -21,6 +21,8 @@ VERBOSE=false
 AUTO_UPDATE=true
 UPDATE_FREQUENCY="daily"
 SKIP_PUSH_CONFIRM=false
+DRY_RUN=false
+SHOW_SUMMARY=false
 
 # 使用方法を表示
 usage() {
@@ -40,6 +42,8 @@ usage() {
     -c, --conventional         Conventional Commits形式を使用
     -p, --prefix <prefix>      カスタムプレフィックス（例: [WIP], [HOTFIX]）
     -y, --yes                  プッシュ前の確認をスキップ
+    --dry-run                  メッセージ生成のみ（コミットしない）
+    --summary                  変更内容の要約を表示
     --update                   今すぐ更新チェック
     --no-update                今回は更新をスキップ
     --version                  バージョン情報を表示
@@ -49,6 +53,7 @@ usage() {
     $(basename $0) -b develop -e -t feat
     $(basename $0) -m "カスタムメッセージ" -n
     $(basename $0) -c -t fix -l en
+    $(basename $0) --dry-run  # メッセージのみ生成
 EOF
 }
 
@@ -229,6 +234,14 @@ while [[ $# -gt 0 ]]; do
             SKIP_PUSH_CONFIRM=true
             shift
             ;;
+        --dry-run)
+            DRY_RUN=true
+            shift
+            ;;
+        --summary)
+            SHOW_SUMMARY=true
+            shift
+            ;;
         --update)
             # 強制更新
             AUTO_UPDATE=true
@@ -297,6 +310,37 @@ print_info "変更サマリ:"
 echo "  ステージング済み: $STAGED_COUNT ファイル"
 echo "  未ステージング: $UNSTAGED_COUNT ファイル"
 echo "  未追跡: $UNTRACKED_COUNT ファイル"
+
+# 詳細な要約表示
+if [ "$SHOW_SUMMARY" = true ]; then
+    echo
+    print_info "📋 詳細な変更内容:"
+    
+    # 変更されたファイルの統計
+    if [ "$STAGED_COUNT" -gt 0 ] || [ "$AUTO_STAGE" = true ]; then
+        echo
+        echo "  📁 ファイル別統計:"
+        git diff --cached --stat 2>/dev/null || git diff --stat
+        
+        # 追加/削除行数
+        ADDITIONS=$(git diff --cached --numstat 2>/dev/null | awk '{sum+=$1} END {print sum}' || echo 0)
+        DELETIONS=$(git diff --cached --numstat 2>/dev/null | awk '{sum+=$2} END {print sum}' || echo 0)
+        [ -z "$ADDITIONS" ] && ADDITIONS=0
+        [ -z "$DELETIONS" ] && DELETIONS=0
+        
+        echo
+        echo "  ➕ $ADDITIONS 行追加"
+        echo "  ➖ $DELETIONS 行削除"
+        
+        # ファイルタイプ別統計
+        echo
+        echo "  📝 ファイルタイプ別:"
+        git diff --cached --name-only 2>/dev/null | rev | cut -d'.' -f1 | rev | sort | uniq -c | sort -rn | head -10 | while read count ext; do
+            [ -n "$ext" ] && echo "    .$ext: $count ファイル"
+        done
+    fi
+    echo
+fi
 
 # 手動ステージングモードの場合
 if [ "$AUTO_STAGE" = false ]; then
@@ -404,6 +448,13 @@ fi
 
 print_info "生成されたコミットメッセージ:"
 echo "$COMMIT_MESSAGE"
+
+# ドライランモードの場合はここで終了
+if [ "$DRY_RUN" = true ]; then
+    echo
+    print_info "ドライランモード: コミットは実行されませんでした"
+    exit 0
+fi
 
 # ユーザーに確認
 echo

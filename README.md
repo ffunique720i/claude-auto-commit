@@ -69,6 +69,12 @@ claude-auto-commit -n
 # Skip push confirmation prompt
 claude-auto-commit -y
 
+# Generate message without committing (dry-run)
+claude-auto-commit --dry-run
+
+# Show detailed change summary
+claude-auto-commit --summary
+
 # Manual file selection without auto-push
 claude-auto-commit -s -n
 
