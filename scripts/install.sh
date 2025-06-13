@@ -29,6 +29,28 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+# Function to remove old CLI version
+remove_old_version() {
+    local old_locations=(
+        "/usr/local/bin/claude-auto-commit"
+        "/opt/homebrew/bin/claude-auto-commit"
+        "$HOME/bin/claude-auto-commit"
+    )
+    
+    for location in "${old_locations[@]}"; do
+        if [[ -f "$location" ]]; then
+            # Check if it's the old CLI version
+            if grep -q "Version: 0.0.5\|VERSION=\"0.0.5\"" "$location" 2>/dev/null; then
+                print_message "$YELLOW" "🗑️  Removing old CLI version from $location..."
+                rm -f "$location" 2>/dev/null || sudo rm -f "$location" 2>/dev/null || {
+                    print_message "$RED" "⚠️  Could not remove $location. Please remove manually:"
+                    print_message "$RED" "   sudo rm $location"
+                }
+            fi
+        fi
+    done
+}
+
 # Function to detect shell and update profile
 update_shell_profile() {
     local shell_profile=""
@@ -62,7 +84,7 @@ update_shell_profile() {
 
 # Banner
 echo ""
-print_message "$BLUE" "🚀 Claude Auto Commit SDK v0.1.0 Installer"
+print_message "$BLUE" "🚀 Claude Auto Commit SDK v0.1.1 Installer"
 print_message "$BLUE" "=========================================="
 echo ""
 
@@ -119,6 +141,10 @@ if [ -z "$ANTHROPIC_API_KEY" ]; then
     echo "   export ANTHROPIC_API_KEY='your-api-key'"
     echo ""
 fi
+
+# Remove old CLI versions
+print_message "$YELLOW" "🧹 Checking for old CLI versions..."
+remove_old_version
 
 # Create necessary directories
 print_message "$YELLOW" "📁 Creating directories..."
