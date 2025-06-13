@@ -9,7 +9,11 @@
 
 Claude Auto-Commit is an open-source tool that automatically generates intelligent Git commit messages by analyzing your code changes using Claude AI. It integrates seamlessly into your development workflow and supports multiple languages and configurations.
 
-⚠️ **Important**: By default, this tool will automatically stage all changes, commit, and push to your remote repository. You will be prompted before pushing (use `-y` to skip confirmation). Use `-n` flag to disable auto-push, or `-s` flag to manually select files to stage.
+⚠️ **Important Notes**: 
+- **Requires Claude Pro subscription** ($20/month) for Claude Code CLI access
+- By default, this tool will automatically stage all changes, commit, and push to your remote repository
+- You will be prompted before pushing (use `-y` to skip confirmation)
+- Use `-n` flag to disable auto-push, or `-s` flag to manually select files to stage
 
 ## 🚀 Quick Start
 
@@ -51,12 +55,30 @@ Complete documentation and examples available at [claude-auto-commit.0xkaz.com](
 
 ## 📋 Requirements
 
+### 1. Claude Subscription (Required)
+You need an active Claude subscription to use this tool:
+- **Claude Pro** ($20/month) - Recommended for individual developers
+- **Claude Team** - For team collaboration
+- Sign up at [claude.ai](https://claude.ai)
+
+### 2. Claude Code CLI Installation
+After subscribing to Claude:
+```bash
+# Option 1: Download from Claude website (Recommended)
+# Visit: https://claude.ai/download
+# Download and install Claude for your platform
+
+# Option 2: Using npm (if available)
+npm install -g @anthropic-ai/claude-cli
+
+# Authenticate with your Claude account
+claude login
+```
+
+### 3. System Requirements
 - Git repository
-- **Claude Code CLI** (requires active Claude subscription)
-  - Install Claude Code CLI: `npm install -g @anthropic-ai/claude-cli` or download from [claude.ai/download](https://claude.ai/download)
-  - Authenticate: `claude login`
-  - **Note**: Claude Code CLI requires an active Claude Pro or Team subscription
 - Bash shell (macOS, Linux, WSL)
+- curl (for installation)
 
 ## 🎯 Examples
 
