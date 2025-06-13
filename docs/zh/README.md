@@ -4,19 +4,21 @@
 
 ![Claude Auto-Commit Hero](../images/hero-banner.png)
 
-🤖 **使用Claude CLI的AI驱动Git提交消息生成器**
+🤖 **使用Claude Code SDK的AI驱动Git提交消息生成器**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub release](https://img.shields.io/github/release/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/releases)
+[![npm version](https://img.shields.io/npm/v/claude-auto-commit.svg)](https://www.npmjs.com/package/claude-auto-commit)
 [![GitHub stars](https://img.shields.io/github/stars/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/stargazers)
 [![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)](https://github.com/0xkaz/claude-auto-commit)
-[![Claude AI](https://img.shields.io/badge/Powered%20by-Claude%20AI-orange.svg)](https://claude.ai)
+[![Node.js](https://img.shields.io/badge/Node.js-22%2B-green.svg)](https://nodejs.org)
+[![Claude Code SDK](https://img.shields.io/badge/Powered%20by-Claude%20Code%20SDK-orange.svg)](https://docs.anthropic.com/en/docs/claude-code)
 
 </div>
 
 **语言**: [English](../en/README.md) | [日本語](../ja/README.md)
 
-Claude Auto-Commit是一个开源命令行工具，将AI驱动的提交消息生成集成到您的Git工作流程中。通过分析您的代码更改，使用Claude AI创建有意义且符合上下文的提交消息。
+Claude Auto-Commit是一个开源命令行工具，将AI驱动的提交消息生成集成到您的Git工作流程中。通过分析您的代码更改，使用Claude Code SDK创建高性能、可靠且有意义且符合上下文的提交消息。
 
 ## 🌟 转变您的提交历史
 
@@ -30,24 +32,34 @@ Claude Auto-Commit是一个开源命令行工具，将AI驱动的提交消息生
 
 ## 🚀 快速开始
 
-### 安装脚本
+### 安装选项
 
+**方法1：一键安装（推荐）**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/install.sh | bash
 ```
 
-### 手动安装
-
+**方法2：NPM全局安装**
 ```bash
-# 下载最新版本
-curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/latest/download/claude-auto-commit.sh
-chmod +x claude-auto-commit
-sudo mv claude-auto-commit /usr/local/bin/
+npm install -g claude-auto-commit
+```
+
+**方法3：一次性执行（无需安装）**
+```bash
+curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/run-once.sh | bash
 ```
 
 ### 基本用法
 
 ```bash
+# 分析更改并生成提交消息
+claude-auto-commit
+
+# 中文界面，表情符号和常规提交格式
+claude-auto-commit -l ja -e -c
+
+# 自定义提交类型并自动推送
+claude-auto-commit -t feat --push
 # 生成提交消息并推送
 claude-auto-commit
 

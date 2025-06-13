@@ -1,18 +1,14 @@
-# Claude Auto-Commit Features
+# Claude Auto-Commit Features (v0.1.0)
 
 ## Core Features
 
 ### 🧠 AI-Powered Commit Messages
-Claude analyzes your code changes to generate meaningful commit messages that accurately describe what was changed and why.
+Claude Code SDK analyzes your code changes to generate meaningful commit messages that accurately describe what was changed and why.
 
 ### 🌍 Multi-Language Support
 Currently supports:
 - English (en)
-- Japanese (ja) 
-- Chinese (zh)
-- Arabic (ar) - Coming soon
-- Spanish (es) - Coming soon
-- French (fr) - Coming soon
+- Japanese (ja)
 
 ### 📝 Conventional Commits
 Support for the [Conventional Commits](https://www.conventionalcommits.org/) specification:
@@ -21,8 +17,17 @@ claude-auto-commit -c -t feat
 # Output: feat: add user authentication module
 ```
 
-### 🔄 Auto-Update
-Automatically checks for updates daily and self-updates when a new version is available.
+### 😊 Emoji Support
+Add contextual emojis to commit messages:
+```bash
+claude-auto-commit -e
+# Output: ✨ Add new user authentication feature
+```
+
+### ⚡ Performance Optimizations
+- **Parallel Processing**: Git commands executed in parallel
+- **Intelligent Caching**: Reduced duplicate API calls
+- **Retry Mechanism**: Enhanced error handling with exponential backoff
 
 ## New Features (v0.0.3)
 
@@ -167,44 +172,106 @@ Apply analyzed patterns to new commits:
 claude-auto-commit --style learned
 ```
 
-## New Features (v0.0.5) - Latest
+## New Features (v0.1.0) - Latest SDK Version
 
-### 📝 Template System
-Save and reuse common commit message patterns:
-
-<div align="center">
-
-![Terminal Demo](./images/demo-english-terminal.png)
-
-*Example of Claude Auto-Commit with detailed summary analysis*
-
-</div>
+### 📝 Enhanced Template System
+Save and reuse common commit message patterns with persistent storage:
 
 ```bash
-# Save a template
-claude-auto-commit --save-template hotfix "🔥 HOTFIX: {description}"
-claude-auto-commit --save-template deps "⬆️ Update {package} from {old_version} to {new_version}"
-claude-auto-commit --save-template wip "[WIP] {feature}: {status}"
+# Save a template (stored in ~/.claude-auto-commit/templates/)
+claude-auto-commit --dry-run --save-template feature-update
 
-# Use a template
-claude-auto-commit --template hotfix
-# Prompts: Enter value for description: [user input]
-# Result: 🔥 HOTFIX: [user input]
+# Use a saved template
+claude-auto-commit --template feature-update
 
-# Short form
-claude-auto-commit -T deps
-
-# List all templates
+# List available templates
 claude-auto-commit --list-templates
-
-# Delete a template
-claude-auto-commit --delete-template wip
 ```
 
-Templates support placeholders with `{variable}` syntax. When using a template with placeholders, you'll be prompted to enter values for each variable.
+### ⚙️ Configuration File Support
+JSON-based configuration with caching:
 
-## Upcoming Features
+```bash
+# Configuration saved in ~/.claude-auto-commit/config.json
+{
+  "language": "ja",
+  "useEmoji": true,
+  "conventionalCommit": true,
+  "verbose": false
+}
+```
 
-- ✂️ **Split Commits**: Break large changes into logical commits
-- 🔧 **Selective Analysis**: Filter files to include/exclude from analysis
-- 🔗 **Git Hook Integration**: Automatic message generation on commit
+### 🚀 Auto-Push Support
+Optional automatic push to remote repository:
+
+```bash
+# Enable auto-push for this commit
+claude-auto-commit --push
+
+# Enable auto-push in configuration
+# "autoPush": true in config.json
+```
+
+### 📊 Verbose Logging & Performance Metrics
+Detailed execution information and timing:
+
+```bash
+# Enable verbose mode
+claude-auto-commit --verbose
+
+# Output:
+# ⏱️  Config and Git setup: 45.23ms
+# ⏱️  Change detection: 12.15ms
+# ⏱️  Staging changes: 89.47ms
+# ⏱️  Git changes analysis: 156.89ms
+# ⏱️  Commit message generation: 1247.56ms
+# ⏱️  Total execution time: 1551.30ms
+```
+
+### 🔄 Enhanced Retry Mechanism
+Improved reliability with exponential backoff:
+
+```bash
+# Automatic retry on failure
+🤖 Generating commit message (attempt 1/3)...
+❌ Attempt 1 failed: Network timeout
+⏳ Retrying in 1000ms...
+🤖 Generating commit message (attempt 2/3)...
+✅ Success!
+```
+
+### 📦 Multiple Installation Methods
+- **One-liner installer**: `curl -fsSL ... | bash`
+- **NPM global**: `npm install -g claude-auto-commit`
+- **One-time execution**: `curl -fsSL .../run-once.sh | bash`
+
+## Breaking Changes (v0.1.0)
+
+### 🔄 Architecture Migration
+- **From**: Claude CLI dependency
+- **To**: Claude Code SDK integration
+- **Benefit**: Better performance, reliability, modern Node.js architecture
+
+### 📋 New Requirements
+- **Node.js 22.0.0+** (upgraded from 16.0.0+)
+- **ANTHROPIC_API_KEY** environment variable
+- **ES Modules** support
+
+### 🛠️ Updated Command Interface
+All previous CLI options remain compatible, with new additions:
+
+| New Flag | Description |
+|----------|-------------|
+| `--push` | Auto-push after commit |
+| `--template <name>` | Use saved template |
+| `--save-template <name>` | Save message as template (dry-run only) |
+| `--list-templates` | List available templates |
+
+## Upcoming Features (v0.2.0+)
+
+- ✂️ **VS Code Extension**: Direct IDE integration
+- 🔧 **CI/CD Integration**: GitHub Actions workflow
+- 🔗 **Plugin System**: Extensible architecture
+- 📈 **Advanced Analytics**: Commit pattern analysis
+- 🌐 **Additional Languages**: Spanish, French, Arabic support
+- 🎯 **Team Features**: Shared templates and conventions

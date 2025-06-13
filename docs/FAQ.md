@@ -1,151 +1,180 @@
-# FAQ - Frequently Asked Questions
+# FAQ - Frequently Asked Questions (v0.1.0)
 
 ## General Questions
 
 ### What is Claude Auto-Commit?
-Claude Auto-Commit is an AI-powered tool that automatically generates meaningful Git commit messages by analyzing your code changes using Claude AI.
+Claude Auto-Commit is an AI-powered tool that automatically generates meaningful Git commit messages by analyzing your code changes using Claude Code SDK with enhanced performance and reliability.
 
 ### How does it work?
-The tool examines your staged and unstaged changes, sends a summary to Claude CLI, and generates an appropriate commit message based on the context and nature of your changes.
+The tool examines your staged and unstaged changes, uses Claude Code SDK to analyze them, and generates an appropriate commit message based on the context and nature of your changes with improved speed and accuracy.
 
 ### ⚠️ Does it automatically push to remote?
-**Yes, by default Claude Auto-Commit will:**
-1. Stage all changes (`git add -A`)
+**By default, Claude Auto-Commit will:**
+1. Stage all changes (`git add .`)
 2. Create a commit with the generated message
-3. **Ask for confirmation before pushing** (NEW in v0.0.2)
-4. Push to the remote repository if confirmed
+3. **NOT push automatically** (changed in v0.1.0)
 
-To skip the push confirmation prompt, use the `-y` or `--yes` flag:
+To enable auto-push, use the `--push` flag:
 ```bash
-claude-auto-commit -y
+claude-auto-commit --push
 ```
 
-To disable auto-push entirely, use the `-n` or `--no-push` flag:
+To preview without committing, use the `--dry-run` flag:
 ```bash
-claude-auto-commit -n
-```
-
-To manually select files to stage, use the `-s` or `--no-stage` flag:
-```bash
-claude-auto-commit -s
+claude-auto-commit --dry-run
 ```
 
 ### Is it free to use?
 Yes, Claude Auto-Commit is open-source and free to use. However, you need:
-- **Claude subscription** (Pro, Max, or Team plan)
-- **Claude Code CLI** installed and authenticated
+- **Claude API access** (Pro/Max plan with API key)
+- **Node.js 22.0.0+** installed
+- **ANTHROPIC_API_KEY** environment variable
 
 The tool itself is free, but it requires Claude's API services which are paid.
 
 ## Installation Issues
 
 ### The installation script fails
-1. Ensure you have `curl` and `git` installed
+1. Ensure you have `curl`, `git`, and `Node.js 22+` installed
 2. Check your internet connection
-3. Try manual installation:
+3. Try alternative installation methods:
    ```bash
-   curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/latest/download/claude-auto-commit.sh
-   chmod +x claude-auto-commit
-   sudo mv claude-auto-commit /usr/local/bin/
+   # Method 1: NPM global installation
+   npm install -g claude-auto-commit
+   
+   # Method 2: One-time execution
+   curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/run-once.sh | bash
    ```
 
-### Command not found after installation
-Add `/usr/local/bin` to your PATH:
+### Node.js version issues
+Ensure you have Node.js 22.0.0 or later:
 ```bash
-export PATH="/usr/local/bin:$PATH"
+node --version  # Should show v22.0.0 or later
+```
+
+Update Node.js if needed:
+- Visit: https://nodejs.org/
+- Use nvm: `nvm install 22 && nvm use 22`
+
+### Command not found after installation
+Add `~/.local/bin` to your PATH:
+```bash
+export PATH="$HOME/.local/bin:$PATH"
 ```
 
 ### Permission denied errors
-Use `sudo` for installation or install to a user directory:
+Use NPM global installation or user directory:
 ```bash
+# NPM method (recommended)
+npm install -g claude-auto-commit
+
+# Or manual user installation
 mkdir -p ~/.local/bin
-curl -L -o ~/.local/bin/claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/latest/download/claude-auto-commit.sh
-chmod +x ~/.local/bin/claude-auto-commit
-export PATH="$HOME/.local/bin:$PATH"
+# Follow one-liner installer
 ```
 
 ## Usage Issues
 
-### Claude CLI not found
-You need to install Claude Code CLI first:
+### ANTHROPIC_API_KEY not set
+You need to set your Claude API key:
 
-1. **Subscribe to Claude**
-   - Visit: https://claude.ai
-   - Choose a plan: Claude Pro, Claude Max, or Team
-   - This is required to use Claude Code CLI
+1. **Get your API key**
+   - Visit: https://console.anthropic.com/
+   - Create an account with Claude Pro/Max plan
+   - Generate an API key
 
-2. **Install Claude Code CLI**
+2. **Set the environment variable**
    ```bash
-   # Option 1: Using npm
-   npm install -g @anthropic-ai/claude-cli
+   # Temporary (current session)
+   export ANTHROPIC_API_KEY="your-api-key-here"
    
-   # Option 2: Download from website
-   # Visit: https://claude.ai/download
+   # Permanent (add to ~/.bashrc or ~/.zshrc)
+   echo 'export ANTHROPIC_API_KEY="your-api-key-here"' >> ~/.bashrc
+   source ~/.bashrc
    ```
 
-3. **Authenticate**
-   ```bash
-   claude login
-   ```
+### Claude Code SDK installation fails
+The tool automatically installs the SDK, but if it fails:
+```bash
+# Manual installation
+npm install -g @anthropic-ai/claude-code
+```
 
 ### No changes detected
 - Ensure you have uncommitted changes
 - Check `git status` to see your changes
-- Use `-s` flag to manually stage files
+- Files are automatically staged in v0.1.0
 
 ### Generated message is not appropriate
 - Use `-t` to specify commit type (feat, fix, docs, etc.)
 - Use `-c` for Conventional Commits format
-- Edit the message with `e` option when prompted
+- Use `--dry-run` to preview before committing
+- Save good messages as templates with `--save-template`
 
-### Auto-push fails
+### Push fails when using --push
 - Check your Git remote configuration
 - Ensure you have push permissions
-- Use `-n` flag to disable auto-push
+- Check branch existence on remote
+
+### Performance is slow
+v0.1.0 includes performance optimizations:
+- Parallel git command execution
+- Intelligent caching
+- Use `--verbose` to see timing metrics
 
 ## Configuration
 
 ### Where is the config file?
-Default location: `~/.claude-auto-commit/config.yml`
-
-### How to disable auto-updates?
-Edit config file:
-```yaml
-auto_update:
-  enabled: false
-```
+Default location: `~/.claude-auto-commit/config.json` (changed to JSON in v0.1.0)
 
 ### How to change default language?
 Edit config file:
-```yaml
-defaults:
-  language: en  # or ja, zh, etc.
+```json
+{
+  "language": "en",
+  "useEmoji": false,
+  "conventionalCommit": false,
+  "verbose": false
+}
 ```
 
-### How to disable auto-push by default?
-Edit config file:
-```yaml
-git:
-  auto_push: false  # Disable auto-push globally
+### How to enable auto-push by default?
+Currently auto-push is disabled by default. Use `--push` flag or future config option.
+
+### Template management
+Templates are stored in: `~/.claude-auto-commit/templates/`
+```bash
+# List templates
+claude-auto-commit --list-templates
+
+# Use template
+claude-auto-commit --template my-template
 ```
 
 ## Troubleshooting
 
 ### Debug mode
-Run with verbose output:
+Run with verbose output to see performance metrics:
 ```bash
-claude-auto-commit -v
+claude-auto-commit --verbose
 ```
 
 ### Check version
 ```bash
-claude-auto-commit --version
+claude-auto-commit --help  # Shows version in help text
 ```
 
 ### Reset configuration
 ```bash
 rm -rf ~/.claude-auto-commit
 ```
+
+### Migration from v0.0.5
+If upgrading from CLI version:
+1. Install new SDK version
+2. Set ANTHROPIC_API_KEY environment variable
+3. Old config.yml will be ignored (JSON format now)
+4. Templates need to be recreated
 
 ## Contributing
 

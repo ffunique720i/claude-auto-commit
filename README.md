@@ -4,20 +4,21 @@
 
 ![Claude Auto-Commit Hero](./docs/images/hero-banner.png)
 
-🤖 **AI-powered Git commit message generator using Claude CLI**
+🤖 **AI-powered Git commit message generator using Claude Code SDK**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub release](https://img.shields.io/github/release/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/releases)
+[![npm version](https://img.shields.io/npm/v/claude-auto-commit.svg)](https://www.npmjs.com/package/claude-auto-commit)
 [![GitHub stars](https://img.shields.io/github/stars/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/network)
 [![GitHub issues](https://img.shields.io/github/issues/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/issues)
 [![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)](https://github.com/0xkaz/claude-auto-commit)
-[![Shell](https://img.shields.io/badge/Shell-Bash-green.svg)](https://github.com/0xkaz/claude-auto-commit)
-[![Claude AI](https://img.shields.io/badge/Powered%20by-Claude%20AI-orange.svg)](https://claude.ai)
+[![Node.js](https://img.shields.io/badge/Node.js-22%2B-green.svg)](https://nodejs.org)
+[![Claude Code SDK](https://img.shields.io/badge/Powered%20by-Claude%20Code%20SDK-orange.svg)](https://docs.anthropic.com/en/docs/claude-code)
 
 </div>
 
-Claude Auto-Commit is an open-source tool that automatically generates intelligent Git commit messages by analyzing your code changes using Claude AI. It integrates seamlessly into your development workflow and supports multiple languages and configurations.
+Claude Auto-Commit is an open-source tool that automatically generates intelligent Git commit messages by analyzing your code changes using Claude Code SDK. It integrates seamlessly into your development workflow with enhanced performance, reliability, and modern JavaScript architecture.
 
 ## 🌟 Transform Your Commit History
 
@@ -30,20 +31,28 @@ Claude Auto-Commit is an open-source tool that automatically generates intellige
 </div>
 
 ⚠️ **Important Notes**: 
-- **Requires Claude Pro, Max, or Team subscription** for Claude Code CLI access
-- By default, this tool will automatically stage all changes, commit, and push to your remote repository
-- You will be prompted before pushing (use `-y` to skip confirmation)
-- Use `-n` flag to disable auto-push, or `-s` flag to manually select files to stage
+- **Requires ANTHROPIC_API_KEY** environment variable
+- By default, this tool will automatically stage all changes and commit
+- Use `--push` flag to enable auto-push to remote repository
+- Use `--dry-run` flag to preview commit messages without committing
 
 ## 🚀 Quick Start
 
-### Installation
+### Installation Options
 
+**Method 1: One-liner installation (recommended)**
 ```bash
-# Download the latest release
-curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/latest/download/claude-auto-commit.sh
-chmod +x claude-auto-commit
-sudo mv claude-auto-commit /usr/local/bin/
+curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/install.sh | bash
+```
+
+**Method 2: NPM global installation**
+```bash
+npm install -g claude-auto-commit
+```
+
+**Method 3: One-time execution (no installation)**
+```bash
+curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/run-once.sh | bash
 ```
 
 ### Basic Usage
@@ -52,24 +61,28 @@ sudo mv claude-auto-commit /usr/local/bin/
 # Analyze changes and generate commit message
 claude-auto-commit
 
-# Custom options
-claude-auto-commit -l en -e -t feat
+# Japanese with emojis and conventional commits
+claude-auto-commit -l ja -e -c
+
+# Custom commit type with auto-push
+claude-auto-commit -t feat --push
 ```
 
 ## ✨ Features
 
-- 🧠 **AI Analysis**: Leverages Claude CLI to understand code changes and generate contextual commit messages
-- 🌍 **Multi-language**: Interface available in English, Japanese, Chinese, Arabic, Spanish, French
+- 🧠 **AI Analysis**: Leverages Claude Code SDK for intelligent code change understanding
+- 🌍 **Multi-language**: Interface available in English and Japanese
 - 📝 **Conventional Commits**: Optional support for conventional commit format
-- 🔄 **Auto-update**: Automatic updates with rollback capability
-- 🎯 **Smart Detection**: Analyzes file types, change patterns, and project context
+- 😊 **Emoji Support**: Add contextual emojis to commit messages
 - 🔍 **Dry Run Mode**: Preview commit messages without making actual commits
-- 📋 **Change Summary**: Detailed statistics about your changes (lines added/deleted, file types)
-- 🧠 **Commit Learning**: Analyze your commit history to maintain consistent style
-- 🎯 **Smart Grouping**: Intelligently categorize files for logical commits
 - 📝 **Template System**: Save and reuse common commit message patterns
-- ⚡ **Lightweight**: Shell script with minimal dependencies
+- ⚙️ **Configuration**: JSON-based configuration file support
+- 🔄 **Retry Mechanism**: Enhanced error handling with exponential backoff
+- ⚡ **Performance**: Parallel processing and intelligent caching
+- 🚀 **Auto-push**: Optional automatic push to remote repository
+- 📊 **Verbose Logging**: Detailed execution metrics and statistics
 - 🛠️ **Configurable**: Extensive customization through CLI options and config files
+- 📦 **Modern Architecture**: Node.js ES modules with TypeScript support
 
 ## 📖 Documentation
 
@@ -81,31 +94,26 @@ Complete documentation available in this repository.
 
 ## 📋 Requirements
 
-### 1. Claude Subscription (Required)
-You need an active Claude subscription to use this tool:
-- **Claude Pro** - For individual developers
-- **Claude Max** - For power users with higher usage limits
-- **Claude Team** - For team collaboration
-- Sign up at [claude.ai](https://claude.ai)
+### System Requirements
+- **Node.js 22.0.0 or later**
+- **Git repository**
+- **ANTHROPIC_API_KEY environment variable**
 
-### 2. Claude Code CLI Installation
-After subscribing to Claude:
+### Claude API Access
+You need a Claude account with API access:
+- **Claude Pro** ($20/month) - Small repositories
+- **Claude Max** ($100/month) - Regular development
+- **Claude Max** ($200/month) - Large projects/teams
+
+Set your API key:
 ```bash
-# Option 1: Download from Claude website (Recommended)
-# Visit: https://claude.ai/download
-# Download and install Claude for your platform
-
-# Option 2: Using npm (if available)
-npm install -g @anthropic-ai/claude-cli
-
-# Authenticate with your Claude account
-claude login
+export ANTHROPIC_API_KEY="your-api-key"
 ```
 
-### 3. System Requirements
-- Git repository
-- Bash shell (macOS, Linux, WSL)
-- curl (for installation)
+### Auto-Installation Dependencies
+The tool automatically installs:
+- Claude Code SDK (`@anthropic-ai/claude-code`)
+- Required Node.js dependencies
 
 ## 🎯 Examples
 

@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Import and run the main script
+const scriptPath = path.join(__dirname, '..', 'src', 'claude-auto-commit.js');
+
+try {
+  await import(scriptPath);
+} catch (error) {
+  console.error('Error running claude-auto-commit:', error.message);
+  process.exit(1);
+}

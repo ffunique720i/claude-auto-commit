@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   release:
@@ -16,11 +17,20 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        registry-url: 'https://registry.npmjs.org'
+        
     - name: Set up variables
       id: vars
       run: |
         echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
         echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        
+    - name: Install dependencies
+      run: npm ci
         
     - name: Create Release Notes
       id: release_notes
@@ -29,37 +39,52 @@ jobs:
         ## 🚀 Claude Auto-Commit ${{ steps.vars.outputs.TAG }}
         
         ### ✨ Features
-        - AI-powered commit message generation using Claude CLI
-        - Multi-language support (English, Japanese, Chinese)
-        - Automatic daily updates
+        - AI-powered commit message generation using Claude Code SDK
+        - Multi-language support (English, Japanese)
+        - Template support for saving and reusing commit messages
+        - Configuration file support
+        - Performance optimizations (parallel processing, caching)
+        - Enhanced error handling with retry mechanism
         - Conventional Commits support
-        - Highly configurable options
+        - Emoji support
         
-        ### 📦 Installation
+        ### 📦 Installation Options
         
-        **Installation script:**
+        **Method 1: One-liner installation (recommended):**
         ```bash
         curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/install.sh | bash
         ```
         
-        **Manual download:**
+        **Method 2: NPM global installation:**
         ```bash
-        # Download the script
-        curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/download/${{ steps.vars.outputs.TAG }}/claude-auto-commit.sh
+        npm install -g claude-auto-commit
+        ```
         
-        # Make executable and install
-        chmod +x claude-auto-commit
-        sudo mv claude-auto-commit /usr/local/bin/
+        **Method 3: One-time execution (no installation):**
+        ```bash
+        curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/run-once.sh | bash
         ```
         
         ### 📋 Requirements
+        - Node.js 22.0.0 or later
         - Git repository
-        - [Claude CLI](https://docs.anthropic.com/claude/cli) installed and configured
-        - Bash shell (macOS, Linux, WSL)
+        - Claude Code SDK (automatically installed)
+        - ANTHROPIC_API_KEY environment variable
+        
+        ### 🔄 Breaking Changes from v0.0.5
+        - Migrated from Claude CLI to Claude Code SDK
+        - Node.js 22.0.0+ now required
+        - Main script changed from .sh to .js
+        - Updated installation process
         
         ### 🌐 Documentation
         Visit [claude-auto-commit.0xkaz.com](https://claude-auto-commit.0xkaz.com) for complete documentation.
         EOF
+        
+    - name: Publish to NPM
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
@@ -67,7 +92,10 @@ jobs:
         name: Claude Auto-Commit ${{ steps.vars.outputs.TAG }}
         body_path: release_notes.md
         files: |
-          src/claude-auto-commit.sh
+          bin/claude-auto-commit
+          src/claude-auto-commit.js
+          scripts/install.sh
+          scripts/run-once.sh
         draft: false
         prerelease: false
       env:

@@ -1,38 +1,41 @@
 {
   "name": "claude-auto-commit",
-  "version": "1.0.0",
-  "description": "AI-powered Git commit message generator using Claude CLI",
-  "main": "src/claude-auto-commit.sh",
+  "version": "0.1.0",
+  "description": "AI-powered Git commit message generator using Claude Code SDK",
+  "main": "src/claude-auto-commit.js",
   "bin": {
-    "claude-auto-commit": "./src/claude-auto-commit.sh"
+    "claude-auto-commit": "bin/claude-auto-commit"
   },
+  "type": "module",
   "scripts": {
-    "test": "bash scripts/test.sh",
-    "build": "bash scripts/build.sh",
-    "release": "bash scripts/release.sh"
+    "start": "node src/claude-auto-commit.js",
+    "commit": "node src/claude-auto-commit.js",
+    "dev": "node --watch src/claude-auto-commit.js",
+    "test": "node test/test.js"
   },
   "keywords": [
+    "claude",
+    "claude-code-sdk",
     "git",
     "commit",
     "ai",
-    "claude",
     "automation",
-    "developer-tools",
-    "cli",
-    "productivity"
+    "sdk"
   ],
-  "author": "0xkaz",
-  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/0xkaz/claude-auto-commit.git"
+    "url": "git+https://github.com/0xkaz/claude-auto-commit.git"
   },
-  "bugs": {
-    "url": "https://github.com/0xkaz/claude-auto-commit/issues"
+  "author": "0xkaz",
+  "license": "MIT",
+  "dependencies": {
+    "@anthropic-ai/claude-code": "^1.0.22"
   },
-  "homepage": "https://claude-auto-commit.0xkaz.com",
+  "devDependencies": {
+    "@types/node": "^20.0.0"
+  },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=22.0.0"
   },
   "os": [
     "darwin",
@@ -41,9 +44,18 @@
   "preferGlobal": true,
   "files": [
     "src/",
+    "bin/",
     "scripts/",
     "docs/",
     "README.md",
-    "LICENSE"
-  ]
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "directories": {
+    "doc": "docs"
+  },
+  "bugs": {
+    "url": "https://github.com/0xkaz/claude-auto-commit/issues"
+  },
+  "homepage": "https://github.com/0xkaz/claude-auto-commit#readme"
 }

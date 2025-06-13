@@ -4,19 +4,21 @@
 
 ![Claude Auto-Commit Hero](../images/hero-banner.png)
 
-🤖 **AI-powered Git commit message generator using Claude CLI**
+🤖 **AI-powered Git commit message generator using Claude Code SDK**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub release](https://img.shields.io/github/release/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/releases)
+[![npm version](https://img.shields.io/npm/v/claude-auto-commit.svg)](https://www.npmjs.com/package/claude-auto-commit)
 [![GitHub stars](https://img.shields.io/github/stars/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/stargazers)
 [![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)](https://github.com/0xkaz/claude-auto-commit)
-[![Claude AI](https://img.shields.io/badge/Powered%20by-Claude%20AI-orange.svg)](https://claude.ai)
+[![Node.js](https://img.shields.io/badge/Node.js-22%2B-green.svg)](https://nodejs.org)
+[![Claude Code SDK](https://img.shields.io/badge/Powered%20by-Claude%20Code%20SDK-orange.svg)](https://docs.anthropic.com/en/docs/claude-code)
 
 </div>
 
 **Language**: [日本語](../ja/README.md) | [中文](../zh/README.md)
 
-Claude Auto-Commit is an open-source command-line tool that integrates AI-powered commit message generation into your Git workflow. By analyzing your code changes, it creates meaningful and contextual commit messages using Claude AI.
+Claude Auto-Commit is an open-source command-line tool that integrates AI-powered commit message generation into your Git workflow. By analyzing your code changes, it creates meaningful and contextual commit messages using Claude Code SDK with enhanced performance and reliability.
 
 ## 🌟 Transform Your Commit History
 
@@ -30,24 +32,34 @@ Claude Auto-Commit is an open-source command-line tool that integrates AI-powere
 
 ## 🚀 Quick Start
 
-### Installation Script
+### Installation Options
 
+**Method 1: One-liner installation (recommended)**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/install.sh | bash
 ```
 
-### Manual Installation
-
+**Method 2: NPM global installation**
 ```bash
-# Download the latest release
-curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/latest/download/claude-auto-commit.sh
-chmod +x claude-auto-commit
-sudo mv claude-auto-commit /usr/local/bin/
+npm install -g claude-auto-commit
+```
+
+**Method 3: One-time execution (no installation)**
+```bash
+curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/run-once.sh | bash
 ```
 
 ### Basic Usage
 
 ```bash
+# Analyze changes and generate commit message
+claude-auto-commit
+
+# Japanese with emojis and conventional commits
+claude-auto-commit -l ja -e -c
+
+# Custom commit type with auto-push
+claude-auto-commit -t feat --push
 # Generate commit message and push
 claude-auto-commit
 

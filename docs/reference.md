@@ -1,85 +1,130 @@
-# Auto Commit Tool
+# Claude Auto-Commit Reference (v0.1.0)
 
-このプロジェクトには、Claude CLIを活用した自動コミットツールが含まれています。
+Claude Code SDKを活用した高性能な自動コミットツールの技術仕様です。
 
 ## 基本使用方法
 
 ```bash
-# 基本実行（元のauto-commit.shと同じ動作）
-./auto-commit.sh
+# 基本実行
+claude-auto-commit
 
-# 短縮版
-./ac
+# NPMグローバルインストール後
+npm install -g claude-auto-commit
+claude-auto-commit
+
+# ワンタイム実行
+curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/run-once.sh | bash
 ```
 
 ## 高度なオプション
 
 ```bash
-# 開発ブランチにプッシュ
-./auto-commit.sh -b develop
+# 日本語 + 絵文字 + Conventional Commits
+claude-auto-commit -l ja -e -c
 
-# 英語でConventional Commits形式
-./auto-commit.sh -l en -c -t feat
+# 特定コミットタイプで自動プッシュ
+claude-auto-commit -t feat --push
 
-# カスタムメッセージでプッシュなし
-./auto-commit.sh -m "Fix critical bug" -n
+# ドライラン（プレビューのみ）
+claude-auto-commit --dry-run
 
-# 手動ステージング + 詳細出力
-./auto-commit.sh -s -v
+# 詳細実行情報とパフォーマンス表示
+claude-auto-commit --verbose
 
-# 絵文字付き
-./auto-commit.sh -e
+# テンプレート使用
+claude-auto-commit --template my-template
 
-# プレフィックス付き
-./auto-commit.sh -p "[HOTFIX]"
+# テンプレート保存（ドライラン時）
+claude-auto-commit --dry-run --save-template feature-update
 ```
 
 ## 全オプション
 
-| オプション | 説明 | デフォルト |
-|-----------|------|----------|
-| `-b, --branch` | プッシュ先ブランチ | `main` |
-| `-l, --language` | 言語 (ja/en) | `ja` |
-| `-e, --emoji` | 絵文字使用 | `false` |
-| `-n, --no-push` | プッシュしない | `false` |
-| `-s, --no-stage` | 手動ステージング | `false` |
-| `-m, --message` | カスタムメッセージ | Claude生成 |
-| `-t, --type` | コミットタイプ | 自動 |
-| `-c, --conventional` | Conventional Commits | `false` |
-| `-p, --prefix` | プレフィックス | なし |
-| `-v, --verbose` | 詳細出力 | `false` |
-| `-h, --help` | ヘルプ表示 | - |
+| オプション | 短縮形 | 説明 | デフォルト |
+|-----------|--------|------|----------|
+| `--language <lang>` | `-l` | 言語 (en/ja) | `en` |
+| `--emoji` | `-e` | 絵文字使用 | `false` |
+| `--conventional` | `-c` | Conventional Commits | `false` |
+| `--type <type>` | `-t` | コミットタイプ | 自動 |
+| `--dry-run` | `-d` | プレビューのみ | `false` |
+| `--verbose` | `-v` | 詳細出力 | `false` |
+| `--push` | `-p` | 自動プッシュ | `false` |
+| `--template <name>` | | テンプレート使用 | なし |
+| `--save-template <name>` | | テンプレート保存 | なし |
+| `--list-templates` | | テンプレート一覧 | - |
+| `--help` | `-h` | ヘルプ表示 | - |
 
 ## 機能
 
-- ✅ Claude CLIによる智的なコミットメッセージ生成
+### 🧠 AI機能
+- ✅ Claude Code SDKによる智的なコミットメッセージ生成
+- ✅ 並列処理とキャッシュによる高速化
+- ✅ 指数バックオフによるリトライ機能
+- ✅ タイムアウト機能と堅牢なエラーハンドリング
+
+### 📝 コミット機能
 - ✅ 変更がない場合の自動終了
-- ✅ ステージング済み/未ステージングの区別
-- ✅ 複数言語対応
+- ✅ 自動ステージング
 - ✅ Conventional Commits対応
-- ✅ 手動ステージング選択
-- ✅ メッセージ編集機能
-- ✅ 柔軟なブランチ指定
-- ✅ カスタムプレフィックス
+- ✅ 絵文字サポート
+- ✅ ドライランモード
+- ✅ オプショナル自動プッシュ
+
+### 🌐 多言語・設定
+- ✅ 多言語対応（英語・日本語）
+- ✅ JSON設定ファイル（キャッシュ機能付き）
+- ✅ テンプレートシステム
+- ✅ 詳細ログとパフォーマンス測定
+
+### 📦 インストール・配布
+- ✅ NPMパッケージ対応
+- ✅ ワンライナーインストーラー
+- ✅ ワンタイム実行スクリプト
+- ✅ ES Modules + Node.js 22+対応
 
 ## 使用例
 
 ### 日常的な開発
 ```bash
-./ac  # 最もシンプル
+claude-auto-commit  # 最もシンプル
 ```
 
 ### フィーチャー開発
 ```bash
-./ac -b feature/new-api -t feat -e
+claude-auto-commit -t feat -e --push
 ```
 
 ### バグ修正
 ```bash
-./ac -t fix -c -l en
+claude-auto-commit -t fix -c -l en
 ```
 
-### ホットフィックス
+### テンプレート活用
 ```bash
-./ac -p "[HOTFIX]" -b main
+# テンプレート保存
+claude-auto-commit --dry-run --save-template hotfix
+
+# テンプレート使用
+claude-auto-commit --template hotfix
 ```
+
+## 技術仕様
+
+### 依存関係
+- **Node.js**: 22.0.0以上
+- **@anthropic-ai/claude-code**: ^1.0.22
+- **Git**: 任意のバージョン
+
+### 設定ファイル
+- **場所**: `~/.claude-auto-commit/config.json`
+- **テンプレート**: `~/.claude-auto-commit/templates/`
+- **キャッシュ**: メモリ内、5分間TTL
+
+### パフォーマンス
+- **並列処理**: Git コマンドの並列実行
+- **キャッシュ**: 設定ファイル、Git 結果のキャッシュ
+- **リトライ**: 最大3回、指数バックオフ
+- **タイムアウト**: 30秒（設定可能）
+
+### 環境変数
+- **ANTHROPIC_API_KEY**: 必須、Claude API キー

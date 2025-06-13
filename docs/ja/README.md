@@ -4,19 +4,21 @@
 
 ![Claude Auto-Commit Hero](../images/hero-banner.png)
 
-🤖 **Claude CLIを使用したAI駆動のGitコミットメッセージ生成ツール**
+🤖 **Claude Code SDKを使用したAI駆動のGitコミットメッセージ生成ツール**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub release](https://img.shields.io/github/release/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/releases)
+[![npm version](https://img.shields.io/npm/v/claude-auto-commit.svg)](https://www.npmjs.com/package/claude-auto-commit)
 [![GitHub stars](https://img.shields.io/github/stars/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/stargazers)
 [![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)](https://github.com/0xkaz/claude-auto-commit)
-[![Claude AI](https://img.shields.io/badge/Powered%20by-Claude%20AI-orange.svg)](https://claude.ai)
+[![Node.js](https://img.shields.io/badge/Node.js-22%2B-green.svg)](https://nodejs.org)
+[![Claude Code SDK](https://img.shields.io/badge/Powered%20by-Claude%20Code%20SDK-orange.svg)](https://docs.anthropic.com/en/docs/claude-code)
 
 </div>
 
 **言語**: [English](../en/README.md) | [中文](../zh/README.md)
 
-Claude Auto-Commitは、AI駆動のコミットメッセージ生成をGitワークフローに統合するオープンソースのコマンドラインツールです。コードの変更を分析し、Claude AIを使用して意味のある文脈に沿ったコミットメッセージを作成します。
+Claude Auto-Commitは、AI駆動のコミットメッセージ生成をGitワークフローに統合するオープンソースのコマンドラインツールです。コードの変更を分析し、Claude Code SDKを使用して高性能で信頼性の高い、意味のある文脈に沿ったコミットメッセージを作成します。
 
 ## 🌟 コミット履歴を変革
 
@@ -30,24 +32,34 @@ Claude Auto-Commitは、AI駆動のコミットメッセージ生成をGitワー
 
 ## 🚀 クイックスタート
 
-### インストールスクリプト
+### インストール方法
 
+**方法1: ワンライナーインストール（推奨）**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/install.sh | bash
 ```
 
-### 手動インストール
-
+**方法2: NPMグローバルインストール**
 ```bash
-# 最新リリースをダウンロード
-curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/latest/download/claude-auto-commit.sh
-chmod +x claude-auto-commit
-sudo mv claude-auto-commit /usr/local/bin/
+npm install -g claude-auto-commit
+```
+
+**方法3: ワンタイム実行（インストール不要）**
+```bash
+curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/run-once.sh | bash
 ```
 
 ### 基本的な使い方
 
 ```bash
+# 変更を分析してコミットメッセージ生成
+claude-auto-commit
+
+# 日本語・絵文字・Conventional Commits形式
+claude-auto-commit -l ja -e -c
+
+# カスタムコミットタイプで自動プッシュ
+claude-auto-commit -t feat --push
 # コミットメッセージを生成してプッシュ
 claude-auto-commit
 
