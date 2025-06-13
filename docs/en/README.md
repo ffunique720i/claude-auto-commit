@@ -5,7 +5,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/0xkaz/claude-auto-commit/releases)
 
-[日本語](../ja/README.md) | [中文](../zh/README.md)
+**Language**: [日本語](../ja/README.md) | [中文](../zh/README.md)
+
+Claude Auto-Commit is an open-source command-line tool that integrates AI-powered commit message generation into your Git workflow. By analyzing your code changes, it creates meaningful and contextual commit messages using Claude AI.
 
 ## 🚀 Quick Start
 

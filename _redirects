@@ -1,0 +1,15 @@
+# Cloudflare Pages Redirects
+
+# Install script redirect
+/install https://claude-auto-commit.0xkaz.com/install.sh 301
+
+# Language redirects based on Accept-Language header
+/ /ja/ 302 Language=ja
+/ /zh/ 302 Language=zh,zh-CN
+/ /es/ 302 Language=es
+/ /fr/ 302 Language=fr
+/ /ar/ 302 Language=ar
+
+# Fallback redirects
+/docs/* /en/:splat 301
+/documentation/* /en/:splat 301

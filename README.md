@@ -5,9 +5,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/0xkaz/claude-auto-commit/releases)
 
+Claude Auto-Commit is an open-source tool that automatically generates intelligent Git commit messages by analyzing your code changes using Claude AI. It integrates seamlessly into your development workflow and supports multiple languages and configurations.
+
 ## 🚀 Quick Start
 
-### One-liner Installation
+### Installation
 
 ```bash
 curl -fsSL https://claude-auto-commit.0xkaz.com/install.sh | bash
@@ -16,22 +18,22 @@ curl -fsSL https://claude-auto-commit.0xkaz.com/install.sh | bash
 ### Basic Usage
 
 ```bash
-# Generate commit message and push
+# Analyze changes and generate commit message
 claude-auto-commit
 
-# With custom options
+# Custom options
 claude-auto-commit -l en -e -t feat
 ```
 
 ## ✨ Features
 
-- 🧠 **AI-Powered**: Generates intelligent commit messages using Claude CLI
-- 🌍 **Multi-language**: Supports English, Japanese, Chinese, Arabic, Spanish, French
-- 📝 **Conventional Commits**: Optional conventional commits format
-- 🔄 **Auto-update**: Daily automatic updates (configurable)
-- 🎯 **Smart Analysis**: Analyzes code changes, file types, and patterns
-- ⚡ **Fast & Lightweight**: Optimized for daily development workflow
-- 🛠️ **Highly Configurable**: Extensive customization options
+- 🧠 **AI Analysis**: Leverages Claude CLI to understand code changes and generate contextual commit messages
+- 🌍 **Multi-language**: Interface available in English, Japanese, Chinese, Arabic, Spanish, French
+- 📝 **Conventional Commits**: Optional support for conventional commit format
+- 🔄 **Auto-update**: Automatic updates with rollback capability
+- 🎯 **Smart Detection**: Analyzes file types, change patterns, and project context
+- ⚡ **Lightweight**: Shell script with minimal dependencies
+- 🛠️ **Configurable**: Extensive customization through CLI options and config files
 
 ## 📖 Documentation
 
@@ -39,9 +41,7 @@ claude-auto-commit -l en -e -t feat
 - [日本語ドキュメント](./docs/ja/README.md)
 - [中文文档](./docs/zh/README.md)
 
-## 🌐 Website
-
-Visit [claude-auto-commit.0xkaz.com](https://claude-auto-commit.0xkaz.com) for complete documentation and examples.
+Complete documentation and examples available at [claude-auto-commit.0xkaz.com](https://claude-auto-commit.0xkaz.com)
 
 ## 📋 Requirements
 
@@ -133,8 +133,16 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 - [Conventional Commits](https://conventionalcommits.org) specification
 - Open source community for inspiration
 
+## 🤝 Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+
 ---
 
 **Made with ❤️ for the developer community**
 
-[Report Issues](https://github.com/0xkaz/claude-auto-commit/issues) | [Request Features](https://github.com/0xkaz/claude-auto-commit/issues/new?template=feature_request.md)
+[Report Issues](https://github.com/0xkaz/claude-auto-commit/issues) | [Request Features](https://github.com/0xkaz/claude-auto-commit/issues/new?template=feature_request.md) | [Documentation](https://claude-auto-commit.0xkaz.com)

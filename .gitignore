@@ -24,6 +24,7 @@ yarn-error.log*
 dist/
 build/
 binaries/
+website/build/
 
 # Logs
 *.log
