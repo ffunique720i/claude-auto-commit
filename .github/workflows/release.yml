@@ -1,0 +1,108 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up variables
+      id: vars
+      run: |
+        echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+        echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+        
+    - name: Create platform-specific binaries
+      run: |
+        # Create binaries directory
+        mkdir -p binaries
+        
+        # Linux AMD64
+        cp src/claude-auto-commit.sh binaries/claude-auto-commit-linux-amd64
+        chmod +x binaries/claude-auto-commit-linux-amd64
+        
+        # Linux ARM64
+        cp src/claude-auto-commit.sh binaries/claude-auto-commit-linux-arm64
+        chmod +x binaries/claude-auto-commit-linux-arm64
+        
+        # macOS AMD64
+        cp src/claude-auto-commit.sh binaries/claude-auto-commit-darwin-amd64
+        chmod +x binaries/claude-auto-commit-darwin-amd64
+        
+        # macOS ARM64 (Apple Silicon)
+        cp src/claude-auto-commit.sh binaries/claude-auto-commit-darwin-arm64
+        chmod +x binaries/claude-auto-commit-darwin-arm64
+        
+        # Update version in binaries
+        sed -i 's/VERSION="1.0.0"/VERSION="${{ steps.vars.outputs.VERSION }}"/' binaries/*
+        
+    - name: Generate checksums
+      run: |
+        cd binaries
+        sha256sum * > checksums.txt
+        
+    - name: Create Release Notes
+      id: release_notes
+      run: |
+        cat > release_notes.md << 'EOF'
+        ## 🚀 Claude Auto-Commit ${{ steps.vars.outputs.TAG }}
+        
+        ### ✨ Features
+        - AI-powered commit message generation using Claude CLI
+        - Multi-language support (English, Japanese, Chinese, Arabic, Spanish, French)
+        - Automatic daily updates
+        - Conventional Commits support
+        - Highly configurable options
+        
+        ### 📦 Installation
+        
+        **One-liner install:**
+        ```bash
+        curl -fsSL https://claude-auto-commit.0xkaz.com/install.sh | bash
+        ```
+        
+        **Manual download:**
+        ```bash
+        # Linux AMD64
+        curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/download/${{ steps.vars.outputs.TAG }}/claude-auto-commit-linux-amd64
+        
+        # macOS (Intel)
+        curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/download/${{ steps.vars.outputs.TAG }}/claude-auto-commit-darwin-amd64
+        
+        # macOS (Apple Silicon)
+        curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/download/${{ steps.vars.outputs.TAG }}/claude-auto-commit-darwin-arm64
+        
+        chmod +x claude-auto-commit
+        sudo mv claude-auto-commit /usr/local/bin/
+        ```
+        
+        ### 📋 Requirements
+        - Git repository
+        - [Claude CLI](https://docs.anthropic.com/claude/cli) installed and configured
+        - Bash shell (macOS, Linux, WSL)
+        
+        ### 🌐 Documentation
+        Visit [claude-auto-commit.0xkaz.com](https://claude-auto-commit.0xkaz.com) for complete documentation.
+        EOF
+        
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: Claude Auto-Commit ${{ steps.vars.outputs.TAG }}
+        body_path: release_notes.md
+        files: |
+          binaries/*
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

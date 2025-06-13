@@ -1,0 +1,49 @@
+{
+  "name": "claude-auto-commit",
+  "version": "1.0.0",
+  "description": "AI-powered Git commit message generator using Claude CLI",
+  "main": "src/claude-auto-commit.sh",
+  "bin": {
+    "claude-auto-commit": "./src/claude-auto-commit.sh"
+  },
+  "scripts": {
+    "test": "bash scripts/test.sh",
+    "build": "bash scripts/build.sh",
+    "release": "bash scripts/release.sh"
+  },
+  "keywords": [
+    "git",
+    "commit",
+    "ai",
+    "claude",
+    "automation",
+    "developer-tools",
+    "cli",
+    "productivity"
+  ],
+  "author": "0xkaz",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0xkaz/claude-auto-commit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/0xkaz/claude-auto-commit/issues"
+  },
+  "homepage": "https://claude-auto-commit.0xkaz.com",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "preferGlobal": true,
+  "files": [
+    "src/",
+    "scripts/",
+    "docs/",
+    "README.md",
+    "LICENSE"
+  ]
+}
