@@ -32,7 +32,7 @@ claude-auto-commit -s
 
 ### Is it free to use?
 Yes, Claude Auto-Commit is open-source and free to use. However, you need:
-- **Claude Pro subscription** ($20/month) or Team plan
+- **Claude subscription** (Pro, Max, or Team plan)
 - **Claude Code CLI** installed and authenticated
 
 The tool itself is free, but it requires Claude's API services which are paid.
@@ -69,9 +69,9 @@ export PATH="$HOME/.local/bin:$PATH"
 ### Claude CLI not found
 You need to install Claude Code CLI first:
 
-1. **Subscribe to Claude Pro or Team**
+1. **Subscribe to Claude**
    - Visit: https://claude.ai
-   - Subscribe to Claude Pro ($20/month) or Team plan
+   - Choose a plan: Claude Pro, Claude Max, or Team
    - This is required to use Claude Code CLI
 
 2. **Install Claude Code CLI**

@@ -10,7 +10,7 @@
 Claude Auto-Commit is an open-source tool that automatically generates intelligent Git commit messages by analyzing your code changes using Claude AI. It integrates seamlessly into your development workflow and supports multiple languages and configurations.
 
 ⚠️ **Important Notes**: 
-- **Requires Claude Pro subscription** ($20/month) for Claude Code CLI access
+- **Requires Claude Pro or Max subscription** for Claude Code CLI access
 - By default, this tool will automatically stage all changes, commit, and push to your remote repository
 - You will be prompted before pushing (use `-y` to skip confirmation)
 - Use `-n` flag to disable auto-push, or `-s` flag to manually select files to stage
@@ -57,7 +57,8 @@ Complete documentation and examples available at [claude-auto-commit.0xkaz.com](
 
 ### 1. Claude Subscription (Required)
 You need an active Claude subscription to use this tool:
-- **Claude Pro** ($20/month) - Recommended for individual developers
+- **Claude Pro** - For individual developers
+- **Claude Max** - For power users with higher usage limits
 - **Claude Team** - For team collaboration
 - Sign up at [claude.ai](https://claude.ai)
 
