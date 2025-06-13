@@ -4,7 +4,6 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub release](https://img.shields.io/github/release/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/releases)
-[![Website](https://img.shields.io/badge/website-claude--auto--commit.0xkaz.com-blue)](https://claude-auto-commit.0xkaz.com/)
 [![GitHub stars](https://img.shields.io/github/stars/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/stargazers)
 
 Claude Auto-Commit is an open-source tool that automatically generates intelligent Git commit messages by analyzing your code changes using Claude AI. It integrates seamlessly into your development workflow and supports multiple languages and configurations.
@@ -20,7 +19,10 @@ Claude Auto-Commit is an open-source tool that automatically generates intellige
 ### Installation
 
 ```bash
-curl -fsSL https://claude-auto-commit.0xkaz.com/install.sh | bash
+# Download the latest release
+curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/latest/download/claude-auto-commit.sh
+chmod +x claude-auto-commit
+sudo mv claude-auto-commit /usr/local/bin/
 ```
 
 ### Basic Usage
@@ -54,7 +56,7 @@ claude-auto-commit -l en -e -t feat
 - [日本語ドキュメント](./docs/ja/README.md)
 - [中文文档](./docs/zh/README.md)
 
-Complete documentation and examples available at [claude-auto-commit.0xkaz.com](https://claude-auto-commit.0xkaz.com)
+Complete documentation available in this repository.
 
 ## 📋 Requirements
 
@@ -144,14 +146,14 @@ claude-auto-commit --update
 
 ## 🔧 Installation Methods
 
-### Method 1: One-liner (Recommended)
+### Method 1: Installation Script (Recommended)
 ```bash
-curl -fsSL https://claude-auto-commit.0xkaz.com/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/install.sh | bash
 ```
 
-### Method 2: Manual Download
+### Method 2: Download from GitHub Releases
 ```bash
-# Download the script
+# Download the latest release
 curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/latest/download/claude-auto-commit.sh
 chmod +x claude-auto-commit
 sudo mv claude-auto-commit /usr/local/bin/
@@ -163,6 +165,14 @@ git clone https://github.com/0xkaz/claude-auto-commit.git
 cd claude-auto-commit
 chmod +x src/claude-auto-commit.sh
 sudo ln -s $(pwd)/src/claude-auto-commit.sh /usr/local/bin/claude-auto-commit
+```
+
+### Method 4: Direct Script Usage
+```bash
+# For development or testing
+git clone https://github.com/0xkaz/claude-auto-commit.git
+cd claude-auto-commit
+./src/claude-auto-commit.sh [options]
 ```
 
 ## ⚙️ Configuration
@@ -213,4 +223,4 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 
 **Made with ❤️ for the developer community**
 
-[Report Issues](https://github.com/0xkaz/claude-auto-commit/issues) | [Request Features](https://github.com/0xkaz/claude-auto-commit/issues/new?template=feature_request.md) | [Documentation](https://claude-auto-commit.0xkaz.com)
+[Report Issues](https://github.com/0xkaz/claude-auto-commit/issues) | [Request Features](https://github.com/0xkaz/claude-auto-commit/issues/new?template=feature_request.md) | [Documentation](https://github.com/0xkaz/claude-auto-commit)

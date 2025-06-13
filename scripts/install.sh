@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Claude Auto-Commit Installer
-# Usage: curl -fsSL https://claude-auto-commit.0xkaz.com/install.sh | bash
+# Usage: curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/install.sh | bash
 
 set -e
 
@@ -35,30 +35,17 @@ print_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Detect OS and architecture
-detect_platform() {
-    local os=$(uname -s | tr '[:upper:]' '[:lower:]')
-    local arch=$(uname -m)
-    
+# Check if system is compatible
+check_system() {
+    local os=$(uname -s)
     case $os in
-        darwin) os="darwin" ;;
-        linux) os="linux" ;;
+        Darwin|Linux) 
+            print_info "System: $os (compatible)"
+            ;;
         *) 
-            print_error "Unsupported OS: $os"
-            exit 1
+            print_warning "Untested OS: $os (may work)"
             ;;
     esac
-    
-    case $arch in
-        x86_64) arch="amd64" ;;
-        arm64|aarch64) arch="arm64" ;;
-        *)
-            print_error "Unsupported architecture: $arch"
-            exit 1
-            ;;
-    esac
-    
-    echo "${os}-${arch}"
 }
 
 # Check if command exists
@@ -106,20 +93,19 @@ get_latest_version() {
     echo "$version"
 }
 
-# Download and install binary
-install_binary() {
-    local platform=$(detect_platform)
+# Download and install script
+install_script() {
     local version=$(get_latest_version)
-    local url="https://github.com/$REPO/releases/download/$version/${BINARY_NAME}-${platform}"
+    local url="https://github.com/$REPO/releases/download/$version/claude-auto-commit.sh"
     
-    print_info "Downloading Claude Auto-Commit $version for $platform..."
+    print_info "Downloading Claude Auto-Commit $version..."
     
     # Create temporary file
     local tmp_file=$(mktemp)
     
-    # Download binary
+    # Download script
     if ! curl -L -o "$tmp_file" "$url"; then
-        print_error "Failed to download binary"
+        print_error "Failed to download script"
         rm -f "$tmp_file"
         exit 1
     fi
@@ -135,7 +121,7 @@ install_binary() {
         sudo mv "$tmp_file" "$INSTALL_DIR/$BINARY_NAME"
     fi
     
-    print_success "Binary installed to $INSTALL_DIR/$BINARY_NAME"
+    print_success "Script installed to $INSTALL_DIR/$BINARY_NAME"
 }
 
 # Create configuration directory
@@ -178,9 +164,9 @@ check_installation() {
         echo "  $BINARY_NAME --help"
         echo "  $BINARY_NAME"
         echo ""
-        echo "Documentation: https://claude-auto-commit.0xkaz.com"
+        echo "Documentation: https://github.com/0xkaz/claude-auto-commit"
     else
-        print_warning "Binary installed but not in PATH"
+        print_warning "Script installed but not in PATH"
         echo "Add $INSTALL_DIR to your PATH or run: export PATH=\"$INSTALL_DIR:\$PATH\""
     fi
 }
@@ -191,8 +177,9 @@ main() {
     echo "================================"
     echo ""
     
+    check_system
     check_dependencies
-    install_binary
+    install_script
     create_config
     check_installation
     

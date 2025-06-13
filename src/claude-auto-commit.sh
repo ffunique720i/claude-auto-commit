@@ -2,7 +2,7 @@
 
 # Claude Auto-Commit - AI-powered Git commit message generator
 # Version: 0.0.5
-# Homepage: https://claude-auto-commit.0xkaz.com
+# Repository: https://github.com/0xkaz/claude-auto-commit
 
 VERSION="0.0.5"
 REPO="0xkaz/claude-auto-commit"
@@ -163,11 +163,10 @@ check_for_updates() {
     fi
 }
 
-# Update binary
+# Update script
 update_binary() {
     local new_version="$1"
-    local platform=$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m | sed 's/x86_64/amd64/')
-    local url="https://github.com/$REPO/releases/download/v$new_version/claude-auto-commit-$platform"
+    local url="https://github.com/$REPO/releases/download/v$new_version/claude-auto-commit.sh"
     local current_binary=$(which claude-auto-commit 2>/dev/null || echo "$0")
     
     # 一時ファイルにダウンロード
@@ -304,7 +303,7 @@ while [[ $# -gt 0 ]]; do
             ;;
         --version)
             echo "Claude Auto-Commit v$VERSION"
-            echo "Homepage: https://claude-auto-commit.0xkaz.com"
+            echo "Repository: https://github.com/0xkaz/claude-auto-commit"
             exit 0
             ;;
         -h|--help)

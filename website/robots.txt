@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://claude-auto-commit.0xkaz.com/sitemap.xml
