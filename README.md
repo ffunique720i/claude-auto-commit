@@ -1,6 +1,10 @@
 # Claude Auto-Commit
 
-🤖 AI-powered Git commit message generator using Claude CLI
+<div align="center">
+
+![Claude Auto-Commit Hero](./docs/images/hero-banner.png)
+
+🤖 **AI-powered Git commit message generator using Claude CLI**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub release](https://img.shields.io/github/release/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/releases)
@@ -11,10 +15,22 @@
 [![Shell](https://img.shields.io/badge/Shell-Bash-green.svg)](https://github.com/0xkaz/claude-auto-commit)
 [![Claude AI](https://img.shields.io/badge/Powered%20by-Claude%20AI-orange.svg)](https://claude.ai)
 
+</div>
+
 Claude Auto-Commit is an open-source tool that automatically generates intelligent Git commit messages by analyzing your code changes using Claude AI. It integrates seamlessly into your development workflow and supports multiple languages and configurations.
 
+## 🌟 Transform Your Commit History
+
+<div align="center">
+
+![Before and After Comparison](./docs/images/demo-before-after-english.png)
+
+*Say goodbye to vague commit messages. Let Claude AI write meaningful commits that tell the story of your code.*
+
+</div>
+
 ⚠️ **Important Notes**: 
-- **Requires Claude Pro or Max subscription** for Claude Code CLI access
+- **Requires Claude Pro, Max, or Team subscription** for Claude Code CLI access
 - By default, this tool will automatically stage all changes, commit, and push to your remote repository
 - You will be prompted before pushing (use `-y` to skip confirmation)
 - Use `-n` flag to disable auto-push, or `-s` flag to manually select files to stage
@@ -92,6 +108,14 @@ claude login
 - curl (for installation)
 
 ## 🎯 Examples
+
+<div align="center">
+
+![Terminal Demo](./docs/images/demo-english-terminal.png)
+
+*See Claude Auto-Commit in action with the `--summary` flag for detailed change analysis*
+
+</div>
 
 ### Basic Usage
 ```bash

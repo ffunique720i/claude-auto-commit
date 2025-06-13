@@ -1,16 +1,48 @@
 # Claude Auto-Commit
 
-🤖 使用Claude CLI的AI驱动Git提交消息生成器
+<div align="center">
+
+![Claude Auto-Commit Hero](../images/hero-banner.png)
+
+🤖 **使用Claude CLI的AI驱动Git提交消息生成器**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/0xkaz/claude-auto-commit/releases)
+[![GitHub release](https://img.shields.io/github/release/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/releases)
+[![GitHub stars](https://img.shields.io/github/stars/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/stargazers)
+[![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)](https://github.com/0xkaz/claude-auto-commit)
+[![Claude AI](https://img.shields.io/badge/Powered%20by-Claude%20AI-orange.svg)](https://claude.ai)
+
+</div>
+
+**语言**: [English](../en/README.md) | [日本語](../ja/README.md)
+
+Claude Auto-Commit是一个开源命令行工具，将AI驱动的提交消息生成集成到您的Git工作流程中。通过分析您的代码更改，使用Claude AI创建有意义且符合上下文的提交消息。
+
+## 🌟 转变您的提交历史
+
+<div align="center">
+
+![Before and After Comparison](../images/demo-before-after-english.png)
+
+*告别模糊的提交消息。让Claude AI编写有意义的提交，讲述您代码的故事。*
+
+</div>
 
 ## 🚀 快速开始
 
-### 一键安装
+### 安装脚本
 
 ```bash
-curl -fsSL https://claude-auto-commit.0xkaz.com/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/install.sh | bash
+```
+
+### 手动安装
+
+```bash
+# 下载最新版本
+curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/latest/download/claude-auto-commit.sh
+chmod +x claude-auto-commit
+sudo mv claude-auto-commit /usr/local/bin/
 ```
 
 ### 基本用法

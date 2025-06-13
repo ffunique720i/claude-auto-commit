@@ -1,16 +1,48 @@
 # Claude Auto-Commit
 
-🤖 Claude CLIを使用したAI駆動のGitコミットメッセージ生成ツール
+<div align="center">
+
+![Claude Auto-Commit Hero](../images/hero-banner.png)
+
+🤖 **Claude CLIを使用したAI駆動のGitコミットメッセージ生成ツール**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/0xkaz/claude-auto-commit/releases)
+[![GitHub release](https://img.shields.io/github/release/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/releases)
+[![GitHub stars](https://img.shields.io/github/stars/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/stargazers)
+[![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)](https://github.com/0xkaz/claude-auto-commit)
+[![Claude AI](https://img.shields.io/badge/Powered%20by-Claude%20AI-orange.svg)](https://claude.ai)
+
+</div>
+
+**言語**: [English](../en/README.md) | [中文](../zh/README.md)
+
+Claude Auto-Commitは、AI駆動のコミットメッセージ生成をGitワークフローに統合するオープンソースのコマンドラインツールです。コードの変更を分析し、Claude AIを使用して意味のある文脈に沿ったコミットメッセージを作成します。
+
+## 🌟 コミット履歴を変革
+
+<div align="center">
+
+![Before and After Comparison](../images/demo-before-after-english.png)
+
+*曖昧なコミットメッセージにさようなら。Claude AIにコードの物語を語る意味のあるコミットを書かせましょう。*
+
+</div>
 
 ## 🚀 クイックスタート
 
-### ワンライナーインストール
+### インストールスクリプト
 
 ```bash
-curl -fsSL https://claude-auto-commit.0xkaz.com/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/install.sh | bash
+```
+
+### 手動インストール
+
+```bash
+# 最新リリースをダウンロード
+curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/latest/download/claude-auto-commit.sh
+chmod +x claude-auto-commit
+sudo mv claude-auto-commit /usr/local/bin/
 ```
 
 ### 基本的な使い方

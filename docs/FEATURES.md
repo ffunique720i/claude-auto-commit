@@ -24,7 +24,7 @@ claude-auto-commit -c -t feat
 ### 🔄 Auto-Update
 Automatically checks for updates daily and self-updates when a new version is available.
 
-## New Features (v0.1.0)
+## New Features (v0.0.3)
 
 ### 🔍 Dry Run Mode
 Preview the generated commit message without actually committing:
@@ -167,10 +167,18 @@ Apply analyzed patterns to new commits:
 claude-auto-commit --style learned
 ```
 
-## New Features (v0.0.5)
+## New Features (v0.0.5) - Latest
 
 ### 📝 Template System
 Save and reuse common commit message patterns:
+
+<div align="center">
+
+![Terminal Demo](./images/demo-english-terminal.png)
+
+*Example of Claude Auto-Commit with detailed summary analysis*
+
+</div>
 
 ```bash
 # Save a template
