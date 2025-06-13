@@ -15,7 +15,7 @@ NC='\033[0m' # No Color
 # Configuration
 REPO="0xkaz/claude-auto-commit"
 INSTALL_DIR="/usr/local/bin"
-BINARY_NAME="claude-auto-commit"
+SCRIPT_NAME="claude-auto-commit"
 CONFIG_DIR="$HOME/.claude-auto-commit"
 
 # Print colored output
@@ -106,20 +106,19 @@ get_latest_version() {
     echo "$version"
 }
 
-# Download and install binary
-install_binary() {
-    local platform=$(detect_platform)
+# Download and install script
+install_script() {
     local version=$(get_latest_version)
-    local url="https://github.com/$REPO/releases/download/$version/${BINARY_NAME}-${platform}"
+    local url="https://github.com/$REPO/releases/download/$version/claude-auto-commit.sh"
     
-    print_info "Downloading Claude Auto-Commit $version for $platform..."
+    print_info "Downloading Claude Auto-Commit $version..."
     
     # Create temporary file
     local tmp_file=$(mktemp)
     
-    # Download binary
+    # Download script
     if ! curl -L -o "$tmp_file" "$url"; then
-        print_error "Failed to download binary"
+        print_error "Failed to download script"
         rm -f "$tmp_file"
         exit 1
     fi
@@ -129,13 +128,13 @@ install_binary() {
     
     # Install to system
     if [ -w "$INSTALL_DIR" ]; then
-        mv "$tmp_file" "$INSTALL_DIR/$BINARY_NAME"
+        mv "$tmp_file" "$INSTALL_DIR/$SCRIPT_NAME"
     else
         print_info "Installing to $INSTALL_DIR (requires sudo)..."
-        sudo mv "$tmp_file" "$INSTALL_DIR/$BINARY_NAME"
+        sudo mv "$tmp_file" "$INSTALL_DIR/$SCRIPT_NAME"
     fi
     
-    print_success "Binary installed to $INSTALL_DIR/$BINARY_NAME"
+    print_success "Script installed to $INSTALL_DIR/$SCRIPT_NAME"
 }
 
 # Create configuration directory
@@ -168,19 +167,19 @@ EOF
     fi
 }
 
-# Check if binary is in PATH
+# Check if script is in PATH
 check_installation() {
-    if command_exists "$BINARY_NAME"; then
-        local version=$($BINARY_NAME --version 2>/dev/null || echo "unknown")
+    if command_exists "$SCRIPT_NAME"; then
+        local version=$($SCRIPT_NAME --version 2>/dev/null || echo "unknown")
         print_success "Installation successful! Version: $version"
         echo ""
         echo "Usage:"
-        echo "  $BINARY_NAME --help"
-        echo "  $BINARY_NAME"
+        echo "  $SCRIPT_NAME --help"
+        echo "  $SCRIPT_NAME"
         echo ""
         echo "Documentation: https://claude-auto-commit.0xkaz.com"
     else
-        print_warning "Binary installed but not in PATH"
+        print_warning "Script installed but not in PATH"
         echo "Add $INSTALL_DIR to your PATH or run: export PATH=\"$INSTALL_DIR:\$PATH\""
     fi
 }
@@ -192,7 +191,7 @@ main() {
     echo ""
     
     check_dependencies
-    install_binary
+    install_script
     create_config
     check_installation
     

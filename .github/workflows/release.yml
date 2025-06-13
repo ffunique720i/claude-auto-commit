@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  build-and-release:
+  release:
     runs-on: ubuntu-latest
     
     steps:
@@ -22,35 +22,6 @@ jobs:
         echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
         echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
         
-    - name: Create platform-specific binaries
-      run: |
-        # Create binaries directory
-        mkdir -p binaries
-        
-        # Linux AMD64
-        cp src/claude-auto-commit.sh binaries/claude-auto-commit-linux-amd64
-        chmod +x binaries/claude-auto-commit-linux-amd64
-        
-        # Linux ARM64
-        cp src/claude-auto-commit.sh binaries/claude-auto-commit-linux-arm64
-        chmod +x binaries/claude-auto-commit-linux-arm64
-        
-        # macOS AMD64
-        cp src/claude-auto-commit.sh binaries/claude-auto-commit-darwin-amd64
-        chmod +x binaries/claude-auto-commit-darwin-amd64
-        
-        # macOS ARM64 (Apple Silicon)
-        cp src/claude-auto-commit.sh binaries/claude-auto-commit-darwin-arm64
-        chmod +x binaries/claude-auto-commit-darwin-arm64
-        
-        # Update version in binaries
-        sed -i 's/VERSION="1.0.0"/VERSION="${{ steps.vars.outputs.VERSION }}"/' binaries/*
-        
-    - name: Generate checksums
-      run: |
-        cd binaries
-        sha256sum * > checksums.txt
-        
     - name: Create Release Notes
       id: release_notes
       run: |
@@ -59,7 +30,7 @@ jobs:
         
         ### ✨ Features
         - AI-powered commit message generation using Claude CLI
-        - Multi-language support (English, Japanese, Chinese, Arabic, Spanish, French)
+        - Multi-language support (English, Japanese, Chinese)
         - Automatic daily updates
         - Conventional Commits support
         - Highly configurable options
@@ -73,15 +44,10 @@ jobs:
         
         **Manual download:**
         ```bash
-        # Linux AMD64
-        curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/download/${{ steps.vars.outputs.TAG }}/claude-auto-commit-linux-amd64
+        # Download the script
+        curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/download/${{ steps.vars.outputs.TAG }}/claude-auto-commit.sh
         
-        # macOS (Intel)
-        curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/download/${{ steps.vars.outputs.TAG }}/claude-auto-commit-darwin-amd64
-        
-        # macOS (Apple Silicon)
-        curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/download/${{ steps.vars.outputs.TAG }}/claude-auto-commit-darwin-arm64
-        
+        # Make executable and install
         chmod +x claude-auto-commit
         sudo mv claude-auto-commit /usr/local/bin/
         ```
@@ -101,7 +67,7 @@ jobs:
         name: Claude Auto-Commit ${{ steps.vars.outputs.TAG }}
         body_path: release_notes.md
         files: |
-          binaries/*
+          src/claude-auto-commit.sh
         draft: false
         prerelease: false
       env:
