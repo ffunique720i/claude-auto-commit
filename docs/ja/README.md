@@ -34,9 +34,9 @@ Claude Auto-Commitは、AI駆動のコミットメッセージ生成をGitワー
 
 ### インストール方法
 
-**方法1: ワンライナーインストール（推奨）**
+**方法1: NPX実行（推奨、インストール不要）**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/install.sh | bash
+npx claude-auto-commit
 ```
 
 **方法2: NPMグローバルインストール**
@@ -44,7 +44,12 @@ curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scrip
 npm install -g claude-auto-commit
 ```
 
-**方法3: ワンタイム実行（インストール不要）**
+**方法3: スクリプトインストール**
+```bash
+curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/install.sh | bash
+```
+
+**方法4: ワンタイムスクリプト実行**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/run-once.sh | bash
 ```
@@ -53,18 +58,13 @@ curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scrip
 
 ```bash
 # 変更を分析してコミットメッセージ生成
-claude-auto-commit
+npx claude-auto-commit
 
 # 日本語・絵文字・Conventional Commits形式
-claude-auto-commit -l ja -e -c
+npx claude-auto-commit -l ja -e -c
 
 # カスタムコミットタイプで自動プッシュ
-claude-auto-commit -t feat --push
-# コミットメッセージを生成してプッシュ
-claude-auto-commit
-
-# カスタムオプション付き
-claude-auto-commit -l ja -e -t feat
+npx claude-auto-commit -t feat --push
 ```
 
 ## ✨ 機能

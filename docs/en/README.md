@@ -34,9 +34,9 @@ Claude Auto-Commit is an open-source command-line tool that integrates AI-powere
 
 ### Installation Options
 
-**Method 1: One-liner installation (recommended)**
+**Method 1: NPX execution (recommended, no installation needed)**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/install.sh | bash
+npx claude-auto-commit
 ```
 
 **Method 2: NPM global installation**
@@ -44,7 +44,12 @@ curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scrip
 npm install -g claude-auto-commit
 ```
 
-**Method 3: One-time execution (no installation)**
+**Method 3: Script installation**
+```bash
+curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/install.sh | bash
+```
+
+**Method 4: One-time script execution**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/run-once.sh | bash
 ```
@@ -53,18 +58,13 @@ curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scrip
 
 ```bash
 # Analyze changes and generate commit message
-claude-auto-commit
+npx claude-auto-commit
 
 # Japanese with emojis and conventional commits
-claude-auto-commit -l ja -e -c
+npx claude-auto-commit -l ja -e -c
 
 # Custom commit type with auto-push
-claude-auto-commit -t feat --push
-# Generate commit message and push
-claude-auto-commit
-
-# With custom options
-claude-auto-commit -l en -e -t feat
+npx claude-auto-commit -t feat --push
 ```
 
 ## ✨ Features
