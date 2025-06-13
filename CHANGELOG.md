@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2024-06-13
+
+### Changed
+- **BREAKING**: Changed default interface language from Japanese to English
+- All system messages, prompts, and outputs now default to English
+- Help text and usage information displayed in English
+- Error messages and status updates in English
+- Comments in source code translated to English
+
+### Fixed
+- Consistent language experience for international users
+- Better compatibility with global development teams
+
 ## [0.1.0] - 2024-06-13
 
 ### Added

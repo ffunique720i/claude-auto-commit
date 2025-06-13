@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # Claude Auto-Commit - AI-powered Git commit message generator
-# Version: 0.1.0
+# Version: 0.2.0
 # Homepage: https://claude-auto-commit.0xkaz.com
 
-VERSION="0.1.0"
+VERSION="0.2.0"
 REPO="0xkaz/claude-auto-commit"
 CONFIG_DIR="$HOME/.claude-auto-commit"
 CONFIG_FILE="$CONFIG_DIR/config.yml"
 LAST_CHECK_FILE="$CONFIG_DIR/last-check"
 
-# デフォルト設定
+# Default settings
 DEFAULT_BRANCH="main"
 DEFAULT_LANGUAGE="en"
 MAX_DIFF_LINES=500
@@ -24,36 +24,36 @@ SKIP_PUSH_CONFIRM=false
 DRY_RUN=false
 SHOW_SUMMARY=false
 
-# 使用方法を表示
+# Display usage information
 usage() {
     cat << EOF
-使用方法: $(basename $0) [オプション]
+Usage: $(basename $0) [options]
 
-オプション:
-    -b, --branch <branch>      プッシュ先のブランチ (デフォルト: main)
-    -l, --language <lang>      コミットメッセージの言語 (ja/en, デフォルト: ja)
-    -e, --emoji                絵文字を使用する
-    -n, --no-push              プッシュしない
-    -s, --no-stage             自動ステージングしない（手動で選択）
-    -d, --diff-lines <num>     差分表示の最大行数 (デフォルト: 500)
-    -m, --message <msg>        カスタムコミットメッセージを使用
-    -t, --type <type>          コミットタイプを指定 (feat/fix/docs/style/refactor/test/chore)
-    -v, --verbose              詳細な出力を表示
-    -c, --conventional         Conventional Commits形式を使用
-    -p, --prefix <prefix>      カスタムプレフィックス（例: [WIP], [HOTFIX]）
-    -y, --yes                  プッシュ前の確認をスキップ
-    --dry-run                  メッセージ生成のみ（コミットしない）
-    --summary                  変更内容の要約を表示
-    --update                   今すぐ更新チェック
-    --no-update                今回は更新をスキップ
-    --version                  バージョン情報を表示
-    -h, --help                 このヘルプを表示
+Options:
+    -b, --branch <branch>      Target branch for push (default: main)
+    -l, --language <lang>      Commit message language (en/ja/zh, default: en)
+    -e, --emoji                Use emoji in commit messages
+    -n, --no-push              Don't push after commit
+    -s, --no-stage             Manual file staging (no auto-stage)
+    -d, --diff-lines <num>     Max diff lines to analyze (default: 500)
+    -m, --message <msg>        Use custom commit message
+    -t, --type <type>          Specify commit type (feat/fix/docs/style/refactor/test/chore)
+    -v, --verbose              Show verbose output
+    -c, --conventional         Use Conventional Commits format
+    -p, --prefix <prefix>      Custom prefix (e.g., [WIP], [HOTFIX])
+    -y, --yes                  Skip push confirmation
+    --dry-run                  Generate message only (no commit)
+    --summary                  Show detailed change summary
+    --update                   Check for updates now
+    --no-update                Skip update check
+    --version                  Show version information
+    -h, --help                 Show this help
 
-例:
+Examples:
     $(basename $0) -b develop -e -t feat
-    $(basename $0) -m "カスタムメッセージ" -n
+    $(basename $0) -m "Custom message" -n
     $(basename $0) -c -t fix -l en
-    $(basename $0) --dry-run  # メッセージのみ生成
+    $(basename $0) --dry-run  # Generate message only
 EOF
 }
 
@@ -74,7 +74,7 @@ print_warning() {
     echo -e "\033[0;33m[WARNING]\033[0m $1"
 }
 
-# 設定読み込み
+# Load config
 load_config() {
     if [ -f "$CONFIG_FILE" ]; then
         # YAML解析（簡易版）
@@ -82,28 +82,28 @@ load_config() {
         UPDATE_FREQUENCY=$(grep -A 3 "auto_update:" "$CONFIG_FILE" | grep "frequency:" | sed 's/.*frequency:[[:space:]]*//' | tr -d '"')
         DEFAULT_LANGUAGE=$(grep -A 5 "defaults:" "$CONFIG_FILE" | grep "language:" | sed 's/.*language:[[:space:]]*//' | tr -d '"')
         
-        # デフォルト値設定
+        # Set default values
         AUTO_UPDATE=${AUTO_UPDATE:-true}
         UPDATE_FREQUENCY=${UPDATE_FREQUENCY:-daily}
         DEFAULT_LANGUAGE=${DEFAULT_LANGUAGE:-en}
     fi
 }
 
-# 最新バージョン取得
+# Get latest version
 get_latest_version() {
     curl -s "https://api.github.com/repos/$REPO/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | sed 's/^v//'
 }
 
-# バージョン比較
+# Compare versions
 version_gt() {
     [ "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1" ]
 }
 
-# 更新チェック
+# Check for updates
 check_for_updates() {
     [ "$AUTO_UPDATE" = "false" ] && return 0
     
-    # 前回チェック時刻を確認
+    # Check last update time
     local now=$(date +%s)
     local last_check=0
     
@@ -123,13 +123,13 @@ check_for_updates() {
         return 0
     fi
     
-    # 最新バージョンをチェック
+    # Check latest version
     local latest_version=$(get_latest_version)
     if [ -z "$latest_version" ]; then
         return 0
     fi
     
-    # チェック時刻を記録
+    # Record check time
     echo "$now" > "$LAST_CHECK_FILE"
     
     if version_gt "$latest_version" "$VERSION"; then
@@ -145,7 +145,7 @@ check_for_updates() {
     fi
 }
 
-# バイナリ更新
+# Update binary
 update_binary() {
     local new_version="$1"
     local platform=$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m | sed 's/x86_64/amd64/')
@@ -158,14 +158,14 @@ update_binary() {
     if curl -L -s -o "$tmp_file" "$url" 2>/dev/null; then
         chmod +x "$tmp_file"
         
-        # バックアップ作成
+        # Create backup
         cp "$current_binary" "$current_binary.backup"
         
-        # 更新実行
+        # Execute update
         if mv "$tmp_file" "$current_binary" 2>/dev/null || sudo mv "$tmp_file" "$current_binary" 2>/dev/null; then
             return 0
         else
-            # 失敗時はバックアップから復元
+            # Restore from backup on failure
             mv "$current_binary.backup" "$current_binary" 2>/dev/null
             rm -f "$tmp_file"
             return 1
@@ -176,7 +176,7 @@ update_binary() {
     fi
 }
 
-# オプション解析
+# Parse options
 BRANCH=$DEFAULT_BRANCH
 LANGUAGE=$DEFAULT_LANGUAGE
 CUSTOM_MESSAGE=""
@@ -243,13 +243,13 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --update)
-            # 強制更新
+            # Force update
             AUTO_UPDATE=true
             UPDATE_FREQUENCY="always"
             shift
             ;;
         --no-update)
-            # 今回は更新スキップ
+            # Skip update this time
             AUTO_UPDATE=false
             shift
             ;;
@@ -263,101 +263,101 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         *)
-            print_error "不明なオプション: $1"
+            print_error "Unknown option: $1"
             usage
             exit 1
             ;;
     esac
 done
 
-# 設定ディレクトリ作成
+# Create config directory
 mkdir -p "$CONFIG_DIR"
 
-# 設定読み込み
+# Load config
 load_config
 
-# 自動更新チェック
+# Auto-update check
 check_for_updates "$@"
 
-# Git リポジトリかチェック
+# Check if we're in a Git repository
 if ! git rev-parse --git-dir > /dev/null 2>&1; then
-    print_error "Gitリポジトリではありません"
+    print_error "Not a Git repository"
     exit 1
 fi
 
-# 現在のブランチを取得
+# Get current branch
 CURRENT_BRANCH=$(git branch --show-current)
-print_info "現在のブランチ: $CURRENT_BRANCH"
+print_info "Current branch: $CURRENT_BRANCH"
 
-# 変更内容のサマリを生成
-print_info "変更内容を解析中..."
+# Generate change summary
+print_info "Analyzing changes..."
 
-# ステージング済みとステージング前の変更を区別して取得
+# Get staged and unstaged changes separately
 STAGED_COUNT=$(git diff --cached --name-only | wc -l)
 UNSTAGED_COUNT=$(git diff --name-only | wc -l)
 UNTRACKED_COUNT=$(git ls-files --others --exclude-standard | wc -l)
 
 TOTAL_CHANGES=$((STAGED_COUNT + UNSTAGED_COUNT + UNTRACKED_COUNT))
 
-# 変更がない場合は終了
+# Exit if no changes
 if [ "$TOTAL_CHANGES" -eq 0 ]; then
-    print_info "変更されたファイルがありません。コミットする内容がないため終了します。"
+    print_info "No files changed. Nothing to commit."
     exit 0
 fi
 
-# 変更内容を表示
-print_info "変更サマリ:"
-echo "  ステージング済み: $STAGED_COUNT ファイル"
-echo "  未ステージング: $UNSTAGED_COUNT ファイル"
-echo "  未追跡: $UNTRACKED_COUNT ファイル"
+# Display change summary
+print_info "Change summary:"
+echo "  Staged: $STAGED_COUNT files"
+echo "  Unstaged: $UNSTAGED_COUNT files"
+echo "  Untracked: $UNTRACKED_COUNT files"
 
-# 詳細な要約表示
+# Show detailed summary
 if [ "$SHOW_SUMMARY" = true ]; then
     echo
-    print_info "📋 詳細な変更内容:"
+    print_info "📋 Detailed change contents:"
     
-    # 変更されたファイルの統計
+    # File statistics
     if [ "$STAGED_COUNT" -gt 0 ] || [ "$AUTO_STAGE" = true ]; then
         echo
-        echo "  📁 ファイル別統計:"
+        echo "  📁 File statistics:"
         git diff --cached --stat 2>/dev/null || git diff --stat
         
-        # 追加/削除行数
+        # Lines added/deleted
         ADDITIONS=$(git diff --cached --numstat 2>/dev/null | awk '{sum+=$1} END {print sum}' || echo 0)
         DELETIONS=$(git diff --cached --numstat 2>/dev/null | awk '{sum+=$2} END {print sum}' || echo 0)
         [ -z "$ADDITIONS" ] && ADDITIONS=0
         [ -z "$DELETIONS" ] && DELETIONS=0
         
         echo
-        echo "  ➕ $ADDITIONS 行追加"
-        echo "  ➖ $DELETIONS 行削除"
+        echo "  ➕ $ADDITIONS lines added"
+        echo "  ➖ $DELETIONS lines deleted"
         
-        # ファイルタイプ別統計
+        # File type statistics
         echo
-        echo "  📝 ファイルタイプ別:"
+        echo "  📝 File types:"
         git diff --cached --name-only 2>/dev/null | rev | cut -d'.' -f1 | rev | sort | uniq -c | sort -rn | head -10 | while read count ext; do
-            [ -n "$ext" ] && echo "    .$ext: $count ファイル"
+            [ -n "$ext" ] && echo "    .$ext: $count files"
         done
     fi
     echo
 fi
 
-# 手動ステージングモードの場合
+# Manual staging mode
 if [ "$AUTO_STAGE" = false ]; then
-    print_warning "手動ステージングモードです。git add -i を実行します..."
+    print_warning "Manual staging mode. Running git add -i..."
     git add -i
     
-    # ステージング後の状態を再確認
+    # Check staging status after manual selection
     STAGED_COUNT=$(git diff --cached --name-only | wc -l)
     if [ "$STAGED_COUNT" -eq 0 ]; then
-        print_error "ステージングされたファイルがありません"
+        print_error "No files staged"
         exit 1
     fi
 fi
 
-# カスタムメッセージが指定されていない場合はClaude CLIで生成
+# Generate message with Claude CLI if no custom message provided
 if [ -z "$CUSTOM_MESSAGE" ]; then
-    # 変更内容の詳細を取得して一時ファイルに保存
+    # Get detailed changes and save to temp file
     TEMP_FILE=$(mktemp)
     {
         echo "=== Git Status ==="
@@ -367,39 +367,39 @@ if [ -z "$CUSTOM_MESSAGE" ]; then
         echo "Staged: $STAGED_COUNT, Unstaged: $UNSTAGED_COUNT, Untracked: $UNTRACKED_COUNT"
         echo ""
         
-        # 変更されたファイルの種類を分析
+        # Analyze changed file types
         echo "=== File Types Analysis ==="
         git diff --cached --name-only | rev | cut -d'.' -f1 | rev | sort | uniq -c | sort -rn
         echo ""
         
-        # 差分の統計情報
+        # Diff statistics
         echo "=== Diff Statistics ==="
         git diff --cached --stat
         echo ""
         
-        # 実際の差分（指定行数まで）
+        # Actual diff (up to specified lines)
         if [ "$VERBOSE" = true ]; then
             echo "=== Actual Changes (first $MAX_DIFF_LINES lines) ==="
             git diff --cached --no-color | head -n $MAX_DIFF_LINES
         fi
     } > "$TEMP_FILE"
 
-    # プロンプトの言語設定
+    # Language prompt settings
     if [ "$LANGUAGE" = "en" ]; then
         PROMPT="Generate an appropriate commit message in English based on the following Git changes.
 The commit message should be concise and capture the essence of the changes."
     else
-        PROMPT="以下のGit変更内容から、適切な日本語のコミットメッセージを生成してください。
-コミットメッセージは簡潔で、変更の本質を表すものにしてください。"
+        PROMPT="Generate an appropriate commit message in Japanese based on the following Git changes.
+The commit message should be concise and capture the essence of the changes."
     fi
 
-    # 絵文字設定
+    # Emoji settings
     if [ "$USE_EMOJI" = true ]; then
         PROMPT="$PROMPT
 Please use appropriate emoji at the beginning of the message."
     else
         PROMPT="$PROMPT
-絵文字は使用しないでください。"
+Do not use emoji."
     fi
 
     # Conventional Commits形式
@@ -419,107 +419,107 @@ Types: feat, fix, docs, style, refactor, test, chore"
 Commit type: $COMMIT_TYPE"
     fi
 
-    # Claude CLIを使用してコミットメッセージを生成
-    print_info "Claude CLIでコミットメッセージを生成中..."
+    # Generate commit message using Claude CLI
+    print_info "Generating commit message with Claude CLI..."
 
     COMMIT_MESSAGE=$(claude -p "$PROMPT
 
-変更内容:
+Changes:
 $(cat "$TEMP_FILE")
 
-コミットメッセージのみを出力してください。説明は不要です。")
+Output only the commit message. No explanation needed.")
 
-    # 一時ファイルを削除
+    # Remove temp file
     rm -f "$TEMP_FILE"
 else
     COMMIT_MESSAGE="$CUSTOM_MESSAGE"
 fi
 
-# プレフィックスを追加
+# Add prefix
 if [ -n "$PREFIX" ]; then
     COMMIT_MESSAGE="$PREFIX $COMMIT_MESSAGE"
 fi
 
-# コミットメッセージが生成されたか確認
+# Verify commit message was generated
 if [ -z "$COMMIT_MESSAGE" ]; then
-    print_error "コミットメッセージの生成に失敗しました"
+    print_error "Failed to generate commit message"
     exit 1
 fi
 
-print_info "生成されたコミットメッセージ:"
+print_info "Generated commit message:"
 echo "$COMMIT_MESSAGE"
 
-# ドライランモードの場合はここで終了
+# Exit here if dry run mode
 if [ "$DRY_RUN" = true ]; then
     echo
-    print_info "ドライランモード: コミットは実行されませんでした"
+    print_info "Dry run mode: No commit was made"
     exit 0
 fi
 
-# ユーザーに確認
+# Confirm with user
 echo
-read -p "このメッセージでコミットしますか？ (y/n/e[dit]): " -r REPLY
+read -p "Commit with this message? (y/n/e[dit]): " -r REPLY
 echo
 
 case $REPLY in
     [Yy])
-        # 自動ステージングが有効な場合
+        # Auto-stage if enabled
         if [ "$AUTO_STAGE" = true ]; then
-            print_info "変更をステージング中..."
+            print_info "Staging changes..."
             git add -A
         fi
         
-        # コミット実行
-        print_info "コミットを実行中..."
+        # Execute commit
+        print_info "Creating commit..."
         git commit -m "$COMMIT_MESSAGE"
         
         if [ $? -eq 0 ]; then
-            print_success "コミットが成功しました"
+            print_success "Commit successful"
             
-            # 自動プッシュが有効な場合
+            # Auto-push if enabled
             if [ "$AUTO_PUSH" = true ]; then
-                # プッシュ前の確認
+                # Confirm before push
                 if [ "$SKIP_PUSH_CONFIRM" = false ]; then
                     echo
-                    print_warning "リモートリポジトリ（$BRANCH ブランチ）にプッシュしようとしています"
-                    read -p "プッシュを続行しますか？ (y/n): " -r PUSH_REPLY
+                    print_warning "About to push to remote repository ($BRANCH branch)"
+                    read -p "Continue with push? (y/n): " -r PUSH_REPLY
                     echo
                     
                     if [[ ! $PUSH_REPLY =~ ^[Yy]$ ]]; then
-                        print_info "プッシュをスキップしました。手動でプッシュしてください: git push origin $BRANCH"
+                        print_info "Push skipped. To push manually: git push origin $BRANCH"
                         exit 0
                     fi
                 fi
                 
-                print_info "$BRANCH ブランチにプッシュ中..."
+                print_info "Pushing to $BRANCH branch..."
                 git push origin "$BRANCH"
                 
                 if [ $? -eq 0 ]; then
-                    print_success "プッシュが完了しました"
+                    print_success "Push completed"
                 else
-                    print_error "プッシュに失敗しました"
-                    print_info "後で手動でプッシュしてください: git push origin $BRANCH"
+                    print_error "Push failed"
+                    print_info "Please push manually later: git push origin $BRANCH"
                 fi
             else
-                print_info "自動プッシュは無効です。手動でプッシュしてください: git push origin $BRANCH"
+                print_info "Auto-push disabled. To push manually: git push origin $BRANCH"
             fi
         else
-            print_error "コミットに失敗しました"
+            print_error "Commit failed"
             exit 1
         fi
         ;;
     [Ee])
-        # メッセージを編集
+        # Edit message
         TEMP_MSG_FILE=$(mktemp)
         echo "$COMMIT_MESSAGE" > "$TEMP_MSG_FILE"
         ${EDITOR:-vim} "$TEMP_MSG_FILE"
         COMMIT_MESSAGE=$(cat "$TEMP_MSG_FILE")
         rm -f "$TEMP_MSG_FILE"
         
-        # 編集後に再度実行
+        # Re-run with edited message
         exec "$0" -m "$COMMIT_MESSAGE" "${@}"
         ;;
     *)
-        print_info "コミットをキャンセルしました"
+        print_info "Commit cancelled"
         ;;
 esac
