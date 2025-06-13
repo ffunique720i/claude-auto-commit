@@ -9,13 +9,13 @@ const __dirname = path.dirname(__filename);
 // Handle version and help commands before importing main script
 const args = process.argv.slice(2);
 if (args.includes('--version')) {
-  console.log('Claude Auto Commit v0.1.3');
+  console.log('Claude Auto Commit v0.1.4');
   process.exit(0);
 }
 
 if (args.includes('--help') || args.includes('-h')) {
   console.log(`
-Claude Auto Commit (SDK Version v0.1.3)
+Claude Auto Commit (SDK Version v0.1.4)
 
 Usage: claude-auto-commit [options]
 
