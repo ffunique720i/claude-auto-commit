@@ -167,9 +167,36 @@ Apply analyzed patterns to new commits:
 claude-auto-commit --style learned
 ```
 
+## New Features (v0.0.5)
+
+### 📝 Template System
+Save and reuse common commit message patterns:
+
+```bash
+# Save a template
+claude-auto-commit --save-template hotfix "🔥 HOTFIX: {description}"
+claude-auto-commit --save-template deps "⬆️ Update {package} from {old_version} to {new_version}"
+claude-auto-commit --save-template wip "[WIP] {feature}: {status}"
+
+# Use a template
+claude-auto-commit --template hotfix
+# Prompts: Enter value for description: [user input]
+# Result: 🔥 HOTFIX: [user input]
+
+# Short form
+claude-auto-commit -T deps
+
+# List all templates
+claude-auto-commit --list-templates
+
+# Delete a template
+claude-auto-commit --delete-template wip
+```
+
+Templates support placeholders with `{variable}` syntax. When using a template with placeholders, you'll be prompted to enter values for each variable.
+
 ## Upcoming Features
 
-- 📝 **Template System**: Save and reuse common commit message patterns
 - ✂️ **Split Commits**: Break large changes into logical commits
 - 🔧 **Selective Analysis**: Filter files to include/exclude from analysis
 - 🔗 **Git Hook Integration**: Automatic message generation on commit

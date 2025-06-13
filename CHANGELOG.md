@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.5] - 2024-06-13
+
+### Added
+- **Template System** for saving and reusing commit message patterns
+  - `--save-template <name> "<template>"` to save a template
+  - `--template <name>` or `-T <name>` to use a saved template
+  - `--list-templates` to show all saved templates
+  - `--delete-template <name>` to remove a template
+- **Smart placeholders** in templates using `{variable}` syntax
+  - Prompts for values when using templates with placeholders
+  - Supports multiple placeholders in a single template
+  - Example: `🔥 HOTFIX: {description} - fixes {issue}`
+- Templates stored in `~/.claude-auto-commit/templates/`
+
 ## [0.0.4] - 2024-06-13
 
 ### Added

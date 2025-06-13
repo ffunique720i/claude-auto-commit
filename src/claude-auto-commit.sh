@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Claude Auto-Commit - AI-powered Git commit message generator
-# Version: 0.0.4
+# Version: 0.0.5
 # Homepage: https://claude-auto-commit.0xkaz.com
 
-VERSION="0.0.4"
+VERSION="0.0.5"
 REPO="0xkaz/claude-auto-commit"
 CONFIG_DIR="$HOME/.claude-auto-commit"
 CONFIG_FILE="$CONFIG_DIR/config.yml"
@@ -26,6 +26,10 @@ SHOW_SUMMARY=false
 SMART_GROUP=false
 ANALYZE_HISTORY=false
 USE_LEARNED_STYLE=false
+SAVE_TEMPLATE=""
+USE_TEMPLATE=""
+LIST_TEMPLATES=false
+DELETE_TEMPLATE=""
 
 # Display usage information
 usage() {
@@ -50,6 +54,10 @@ Options:
     --smart-group              Group related files into logical commits
     --analyze-history          Analyze commit history to learn patterns
     --style learned            Use learned commit style from history
+    --save-template <name>     Save a commit message template
+    --template <name>          Use a saved template (-T for short)
+    --list-templates           List all saved templates
+    --delete-template <name>   Delete a saved template
     --update                   Check for updates now
     --no-update                Skip update check
     --version                  Show version information
@@ -62,6 +70,8 @@ Examples:
     $(basename $0) --dry-run  # Generate message only
     $(basename $0) --smart-group  # Group related files
     $(basename $0) --analyze-history  # Learn from commit history
+    $(basename $0) --save-template hotfix "🔥 HOTFIX: {description}"
+    $(basename $0) --template hotfix  # Use saved template
 EOF
 }
 
@@ -264,6 +274,23 @@ while [[ $# -gt 0 ]]; do
             fi
             shift 2
             ;;
+        --save-template)
+            SAVE_TEMPLATE="$2"
+            CUSTOM_MESSAGE="$3"
+            shift 3
+            ;;
+        --template|-T)
+            USE_TEMPLATE="$2"
+            shift 2
+            ;;
+        --list-templates)
+            LIST_TEMPLATES=true
+            shift
+            ;;
+        --delete-template)
+            DELETE_TEMPLATE="$2"
+            shift 2
+            ;;
         --update)
             # Force update
             AUTO_UPDATE=true
@@ -295,11 +322,55 @@ done
 # Create config directory
 mkdir -p "$CONFIG_DIR"
 
+# Create templates directory
+TEMPLATES_DIR="$CONFIG_DIR/templates"
+mkdir -p "$TEMPLATES_DIR"
+
 # Load config
 load_config
 
 # Auto-update check
 check_for_updates "$@"
+
+# Template management functions
+if [ "$LIST_TEMPLATES" = true ]; then
+    print_info "📝 Available templates:"
+    if [ -d "$TEMPLATES_DIR" ] && [ "$(ls -A "$TEMPLATES_DIR" 2>/dev/null)" ]; then
+        for template in "$TEMPLATES_DIR"/*; do
+            [ -f "$template" ] && {
+                name=$(basename "$template")
+                content=$(cat "$template")
+                echo "  • $name: $content"
+            }
+        done
+    else
+        echo "  No templates found."
+        echo "  Create one with: $(basename $0) --save-template <name> \"<template>\""
+    fi
+    exit 0
+fi
+
+if [ -n "$DELETE_TEMPLATE" ]; then
+    if [ -f "$TEMPLATES_DIR/$DELETE_TEMPLATE" ]; then
+        rm "$TEMPLATES_DIR/$DELETE_TEMPLATE"
+        print_success "Template '$DELETE_TEMPLATE' deleted"
+    else
+        print_error "Template '$DELETE_TEMPLATE' not found"
+    fi
+    exit 0
+fi
+
+if [ -n "$SAVE_TEMPLATE" ]; then
+    if [ -z "$CUSTOM_MESSAGE" ]; then
+        print_error "Template content required"
+        echo "Usage: $(basename $0) --save-template <name> \"<template>\""
+        exit 1
+    fi
+    echo "$CUSTOM_MESSAGE" > "$TEMPLATES_DIR/$SAVE_TEMPLATE"
+    print_success "Template '$SAVE_TEMPLATE' saved"
+    echo "Use it with: $(basename $0) --template $SAVE_TEMPLATE"
+    exit 0
+fi
 
 # Check if we're in a Git repository
 if ! git rev-parse --git-dir > /dev/null 2>&1; then
@@ -487,6 +558,37 @@ if [ "$AUTO_STAGE" = false ]; then
     STAGED_COUNT=$(git diff --cached --name-only | wc -l)
     if [ "$STAGED_COUNT" -eq 0 ]; then
         print_error "No files staged"
+        exit 1
+    fi
+fi
+
+# Use template if specified
+if [ -n "$USE_TEMPLATE" ]; then
+    if [ -f "$TEMPLATES_DIR/$USE_TEMPLATE" ]; then
+        TEMPLATE_CONTENT=$(cat "$TEMPLATES_DIR/$USE_TEMPLATE")
+        print_info "Using template: $USE_TEMPLATE"
+        
+        # Process template placeholders
+        if echo "$TEMPLATE_CONTENT" | grep -q "{"; then
+            # Extract placeholders
+            PLACEHOLDERS=$(echo "$TEMPLATE_CONTENT" | grep -o '{[^}]*}' | sort -u)
+            
+            # Replace each placeholder
+            FINAL_MESSAGE="$TEMPLATE_CONTENT"
+            for placeholder in $PLACEHOLDERS; do
+                var_name=$(echo "$placeholder" | tr -d '{}')
+                echo
+                read -p "Enter value for $var_name: " -r var_value
+                FINAL_MESSAGE=$(echo "$FINAL_MESSAGE" | sed "s/$placeholder/$var_value/g")
+            done
+            CUSTOM_MESSAGE="$FINAL_MESSAGE"
+        else
+            CUSTOM_MESSAGE="$TEMPLATE_CONTENT"
+        fi
+    else
+        print_error "Template '$USE_TEMPLATE' not found"
+        print_info "Available templates:"
+        ls "$TEMPLATES_DIR" 2>/dev/null | sed 's/^/  • /' || echo "  No templates found"
         exit 1
     fi
 fi

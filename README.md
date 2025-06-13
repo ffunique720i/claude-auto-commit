@@ -44,6 +44,7 @@ claude-auto-commit -l en -e -t feat
 - 📋 **Change Summary**: Detailed statistics about your changes (lines added/deleted, file types)
 - 🧠 **Commit Learning**: Analyze your commit history to maintain consistent style
 - 🎯 **Smart Grouping**: Intelligently categorize files for logical commits
+- 📝 **Template System**: Save and reuse common commit message patterns
 - ⚡ **Lightweight**: Shell script with minimal dependencies
 - 🛠️ **Configurable**: Extensive customization through CLI options and config files
 
@@ -132,6 +133,11 @@ claude-auto-commit --summary
 # Combine options for detailed preview
 claude-auto-commit --dry-run --summary -v
 
+# Template management
+claude-auto-commit --save-template hotfix "🔥 HOTFIX: {description}"
+claude-auto-commit --template hotfix
+claude-auto-commit --list-templates
+
 # Update tool
 claude-auto-commit --update
 ```
@@ -180,12 +186,14 @@ git:
   auto_push: true
 ```
 
-## 🚀 What's New in v0.0.4
+## 🚀 What's New in v0.0.5
 
-- **Smart Grouping**: Analyze and categorize files for logical commits with `--smart-group`
-- **Commit History Learning**: Learn from your project's commit style with `--analyze-history`
-- **Learned Style**: Apply analyzed patterns to new commits with `--style learned`
-- **macOS Compatibility**: Fixed compatibility issues for macOS users
+- **Template System**: Save and reuse commit message templates
+  - Save templates: `--save-template <name> "<template>"`
+  - Use templates: `--template <name>` or `-T <name>`
+  - List templates: `--list-templates`
+  - Delete templates: `--delete-template <name>`
+- **Smart placeholders**: Use `{variable}` in templates for dynamic values
 
 ## 🤝 Contributing
 
