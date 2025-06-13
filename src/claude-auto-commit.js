@@ -518,10 +518,13 @@ function parseArgs() {
           process.exit(0);
         })();
         return;
+      case '--version':
+        console.log('Claude Auto Commit v0.1.2');
+        process.exit(0);
       case '-h':
       case '--help':
         console.log(`
-Claude Auto Commit (SDK Version v0.1.0)
+Claude Auto Commit (SDK Version v0.1.2)
 
 Usage: node src/claude-auto-commit.js [options]
 
@@ -536,6 +539,7 @@ Options:
   --template <name>          Use saved template
   --save-template <name>     Save generated message as template (dry-run only)
   --list-templates           List available templates
+  --version                  Show version information
   -h, --help                 Show this help message
 
 Examples:
