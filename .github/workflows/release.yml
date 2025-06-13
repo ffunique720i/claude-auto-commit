@@ -37,9 +37,9 @@ jobs:
         
         ### 📦 Installation
         
-        **One-liner install:**
+        **Installation script:**
         ```bash
-        curl -fsSL https://claude-auto-commit.0xkaz.com/install.sh | bash
+        curl -fsSL https://raw.githubusercontent.com/0xkaz/claude-auto-commit/main/scripts/install.sh | bash
         ```
         
         **Manual download:**
