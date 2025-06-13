@@ -50,7 +50,10 @@ Complete documentation and examples available at [claude-auto-commit.0xkaz.com](
 ## 📋 Requirements
 
 - Git repository
-- [Claude CLI](https://docs.anthropic.com/claude/cli) installed and configured
+- **Claude Code CLI** (requires active Claude subscription)
+  - Install Claude Code CLI: `npm install -g @anthropic-ai/claude-cli` or download from [claude.ai/download](https://claude.ai/download)
+  - Authenticate: `claude login`
+  - **Note**: Claude Code CLI requires an active Claude Pro or Team subscription
 - Bash shell (macOS, Linux, WSL)
 
 ## 🎯 Examples

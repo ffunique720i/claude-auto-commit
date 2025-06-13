@@ -31,7 +31,11 @@ claude-auto-commit -s
 ```
 
 ### Is it free to use?
-Yes, Claude Auto-Commit is open-source and free to use. However, you need a Claude CLI subscription to use the AI features.
+Yes, Claude Auto-Commit is open-source and free to use. However, you need:
+- **Claude Pro subscription** ($20/month) or Team plan
+- **Claude Code CLI** installed and authenticated
+
+The tool itself is free, but it requires Claude's API services which are paid.
 
 ## Installation Issues
 
@@ -63,9 +67,26 @@ export PATH="$HOME/.local/bin:$PATH"
 ## Usage Issues
 
 ### Claude CLI not found
-Install Claude CLI first:
-- Visit: https://docs.anthropic.com/claude/cli
-- Follow the installation instructions for your platform
+You need to install Claude Code CLI first:
+
+1. **Subscribe to Claude Pro or Team**
+   - Visit: https://claude.ai
+   - Subscribe to Claude Pro ($20/month) or Team plan
+   - This is required to use Claude Code CLI
+
+2. **Install Claude Code CLI**
+   ```bash
+   # Option 1: Using npm
+   npm install -g @anthropic-ai/claude-cli
+   
+   # Option 2: Download from website
+   # Visit: https://claude.ai/download
+   ```
+
+3. **Authenticate**
+   ```bash
+   claude login
+   ```
 
 ### No changes detected
 - Ensure you have uncommitted changes
