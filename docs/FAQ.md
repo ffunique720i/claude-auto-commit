@@ -8,6 +8,22 @@ Claude Auto-Commit is an AI-powered tool that automatically generates meaningful
 ### How does it work?
 The tool examines your staged and unstaged changes, sends a summary to Claude CLI, and generates an appropriate commit message based on the context and nature of your changes.
 
+### ⚠️ Does it automatically push to remote?
+**Yes, by default Claude Auto-Commit will:**
+1. Stage all changes (`git add -A`)
+2. Create a commit with the generated message
+3. Push to the remote repository
+
+To disable auto-push, use the `-n` or `--no-push` flag:
+```bash
+claude-auto-commit -n
+```
+
+To manually select files to stage, use the `-s` or `--no-stage` flag:
+```bash
+claude-auto-commit -s
+```
+
 ### Is it free to use?
 Yes, Claude Auto-Commit is open-source and free to use. However, you need a Claude CLI subscription to use the AI features.
 
@@ -77,6 +93,13 @@ Edit config file:
 ```yaml
 defaults:
   language: en  # or ja, zh, etc.
+```
+
+### How to disable auto-push by default?
+Edit config file:
+```yaml
+git:
+  auto_push: false  # Disable auto-push globally
 ```
 
 ## Troubleshooting

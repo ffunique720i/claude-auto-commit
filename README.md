@@ -9,6 +9,8 @@
 
 Claude Auto-Commit is an open-source tool that automatically generates intelligent Git commit messages by analyzing your code changes using Claude AI. It integrates seamlessly into your development workflow and supports multiple languages and configurations.
 
+⚠️ **Important**: By default, this tool will automatically stage all changes, commit, and push to your remote repository. Use `-n` flag to disable auto-push, or `-s` flag to manually select files to stage.
+
 ## 🚀 Quick Start
 
 ### Installation
@@ -55,8 +57,14 @@ Complete documentation and examples available at [claude-auto-commit.0xkaz.com](
 
 ### Basic Usage
 ```bash
-# Simple commit with auto-generated message
+# Simple commit with auto-generated message (will auto-stage, commit, and push)
 claude-auto-commit
+
+# Commit without auto-push (recommended for beginners)
+claude-auto-commit -n
+
+# Manual file selection without auto-push
+claude-auto-commit -s -n
 
 # Custom branch and emoji
 claude-auto-commit -b develop -e
