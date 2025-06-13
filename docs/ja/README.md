@@ -30,6 +30,14 @@ Claude Auto-Commitは、AI駆動のコミットメッセージ生成をGitワー
 
 </div>
 
+⚠️ **重要な注意事項**: 
+- **Claude Pro/Maxサブスクリプション**とClaude CLI認証が必要です
+- **APIキーは不要** - Claude Code SDKでOAuth認証を使用
+- まだ認証していない場合は `claude login` を実行してください
+- デフォルトで全ての変更を自動ステージングしてコミットします
+- リモートリポジトリへの自動プッシュは `--push` フラグを使用
+- コミット前のプレビューは `--dry-run` フラグを使用
+
 ## 🚀 クイックスタート
 
 ### インストール方法
@@ -66,6 +74,21 @@ npx claude-auto-commit -l ja -e -c
 # カスタムコミットタイプで自動プッシュ
 npx claude-auto-commit -t feat --push
 ```
+
+### 認証設定
+
+Claude Auto-CommitはClaude Code SDKを使用し、**Claude ProまたはMaxサブスクリプション**が必要です：
+
+```bash
+# 初回設定: Claude CLIにログイン
+claude login
+
+# オプション選択: "2. Claude app (requires Max subscription)"
+# ブラウザでOAuth認証が開きます
+# APIキー不要 - 認証は自動で処理されます
+```
+
+初回ログイン後は認証情報が保存され、claude-auto-commitがシームレスに動作します。
 
 ## ✨ 機能
 

@@ -134,11 +134,20 @@ else
     print_message "$GREEN" "✅ Claude Code SDK found"
 fi
 
-# Check ANTHROPIC_API_KEY
-if [ -z "$ANTHROPIC_API_KEY" ]; then
-    print_message "$YELLOW" "⚠️  ANTHROPIC_API_KEY is not set"
-    echo "   Please set your API key after installation:"
-    echo "   export ANTHROPIC_API_KEY='your-api-key'"
+# Check Claude CLI authentication
+if ! command_exists claude; then
+    print_message "$YELLOW" "⚠️  Claude CLI not found. Installing..."
+    npm install -g @anthropic-ai/claude-code
+else
+    print_message "$GREEN" "✅ Claude CLI found"
+fi
+
+# Check if Claude is authenticated
+if ! claude -p "test" >/dev/null 2>&1; then
+    print_message "$YELLOW" "⚠️  Claude CLI not authenticated"
+    echo "   Please run the following command after installation:"
+    echo "   claude login"
+    echo "   (Requires Claude Pro/Max subscription)"
     echo ""
 fi
 
@@ -200,8 +209,9 @@ echo ""
 print_message "$GREEN" "🎉 Installation complete!"
 echo ""
 print_message "$BLUE" "📖 Quick Start:"
-echo "   1. Set your API key:"
-echo "      export ANTHROPIC_API_KEY='your-api-key'"
+echo "   1. Authenticate with Claude (if not already done):"
+echo "      claude login"
+echo "      (Choose option 2: Claude app - requires Pro/Max subscription)"
 echo ""
 echo "   2. Use claude-auto-commit in any git repository:"
 echo "      claude-auto-commit"

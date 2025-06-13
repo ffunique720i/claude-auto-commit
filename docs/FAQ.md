@@ -28,9 +28,26 @@ claude-auto-commit --dry-run
 Yes, Claude Auto-Commit is open-source and free to use. However, you need:
 - **Claude API access** (Pro/Max plan with API key)
 - **Node.js 22.0.0+** installed
-- **ANTHROPIC_API_KEY** environment variable
+- **Claude Pro/Max subscription**
+- **Claude CLI authentication** (run `claude login`)
 
-The tool itself is free, but it requires Claude's API services which are paid.
+The tool itself is free, but it requires Claude Pro/Max subscription. No API key needed - uses OAuth authentication.
+
+## Authentication Issues
+
+### How do I authenticate with Claude?
+Run `claude login` and choose option 2: "Claude app (requires Max subscription)". This opens your browser for OAuth authentication.
+
+### Do I need an API key?
+No! Claude Auto-Commit uses Claude Code SDK with OAuth authentication. Just run `claude login` once.
+
+### What if I get "authentication failed" errors?
+1. Ensure you have Claude Pro/Max subscription
+2. Run `claude login` to re-authenticate
+3. Check that `claude -p "test"` works in your terminal
+
+### Can I use my existing ANTHROPIC_API_KEY?
+No, Claude Code SDK uses OAuth authentication, not API keys. Use `claude login` instead.
 
 ## Installation Issues
 

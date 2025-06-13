@@ -56,11 +56,13 @@ git clone --depth 1 "$REPO_URL" . 2>/dev/null || {
 echo "📦 Installing dependencies..."
 npm install --silent
 
-# Check API key
-if [ -z "$ANTHROPIC_API_KEY" ]; then
-    echo "⚠️  ANTHROPIC_API_KEY is not set"
-    echo "   Please set your API key: export ANTHROPIC_API_KEY='your-key'"
+# Check Claude CLI authentication
+if ! claude -p "test" >/dev/null 2>&1; then
+    echo "⚠️  Claude CLI not authenticated"
+    echo "   Please run: claude login"
+    echo "   (Requires Claude Pro/Max subscription)"
     echo ""
+    exit 1
 fi
 
 # Parse command line arguments and pass them through

@@ -31,7 +31,9 @@ Claude Auto-Commit is an open-source tool that automatically generates intellige
 </div>
 
 ⚠️ **Important Notes**: 
-- **Requires ANTHROPIC_API_KEY** environment variable
+- **Requires Claude Pro/Max subscription** and Claude CLI authentication
+- **No API key needed** - uses Claude Code SDK with OAuth authentication
+- Run `claude login` first if not already authenticated
 - By default, this tool will automatically stage all changes and commit
 - Use `--push` flag to enable auto-push to remote repository
 - Use `--dry-run` flag to preview commit messages without committing
@@ -72,6 +74,21 @@ npx claude-auto-commit -l ja -e -c
 # Custom commit type with auto-push
 npx claude-auto-commit -t feat --push
 ```
+
+### Authentication Setup
+
+Claude Auto-Commit uses Claude Code SDK which requires **Claude Pro or Max subscription**:
+
+```bash
+# First-time setup: Login to Claude CLI
+claude login
+
+# Choose option: "2. Claude app (requires Max subscription)"
+# This opens your browser for OAuth authentication
+# No API key needed - authentication is handled automatically
+```
+
+After initial login, your authentication is saved and claude-auto-commit will work seamlessly.
 
 ## ✨ Features
 
@@ -238,13 +255,16 @@ git:
   auto_push: true
 ```
 
-## 🚀 What's New in v0.0.5
+## 🚀 What's New in v0.1.4
 
-- **Template System**: Save and reuse commit message templates
-  - Save templates: `--save-template <name> "<template>"`
-  - Use templates: `--template <name>` or `-T <name>`
-  - List templates: `--list-templates`
-  - Delete templates: `--delete-template <name>`
+- **Claude Code SDK Migration**: Migrated from Claude CLI to modern Claude Code SDK
+  - Enhanced performance with parallel processing and intelligent caching
+  - Exponential backoff retry mechanism for improved reliability
+  - Template system with persistent storage
+  - JSON configuration file support
+- **NPM Package Distribution**: Available via `npx claude-auto-commit`
+- **OAuth Authentication**: No API key required for Claude Pro/Max users
+- **ES Modules Architecture**: Modern JavaScript with Node.js 22+ support
 - **Smart placeholders**: Use `{variable}` in templates for dynamic values
 
 ## 🤝 Contributing

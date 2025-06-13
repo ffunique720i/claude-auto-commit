@@ -74,7 +74,8 @@ jobs:
         - Node.js 22.0.0 or later
         - Git repository
         - Claude Code SDK (automatically installed)
-        - ANTHROPIC_API_KEY environment variable
+        - Claude Pro/Max subscription
+        - Claude CLI authentication (run `claude login`)
         
         ### 🔄 Breaking Changes from v0.0.5
         - Migrated from Claude CLI to Claude Code SDK

@@ -30,6 +30,14 @@ Claude Auto-Commit is an open-source command-line tool that integrates AI-powere
 
 </div>
 
+⚠️ **Important Notes**: 
+- **Requires Claude Pro/Max subscription** and Claude CLI authentication
+- **No API key needed** - uses Claude Code SDK with OAuth authentication
+- Run `claude login` first if not already authenticated
+- By default, this tool will automatically stage all changes and commit
+- Use `--push` flag to enable auto-push to remote repository
+- Use `--dry-run` flag to preview commit messages without committing
+
 ## 🚀 Quick Start
 
 ### Installation Options
@@ -66,6 +74,21 @@ npx claude-auto-commit -l ja -e -c
 # Custom commit type with auto-push
 npx claude-auto-commit -t feat --push
 ```
+
+### Authentication Setup
+
+Claude Auto-Commit uses Claude Code SDK which requires **Claude Pro or Max subscription**:
+
+```bash
+# First-time setup: Login to Claude CLI
+claude login
+
+# Choose option: "2. Claude app (requires Max subscription)"
+# This opens your browser for OAuth authentication
+# No API key needed - authentication is handled automatically
+```
+
+After initial login, your authentication is saved and claude-auto-commit will work seamlessly.
 
 ## ✨ Features
 
