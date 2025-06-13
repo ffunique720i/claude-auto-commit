@@ -36,6 +36,8 @@ claude-auto-commit -l en -e -t feat
 - 📝 **Conventional Commits**: Optional support for conventional commit format
 - 🔄 **Auto-update**: Automatic updates with rollback capability
 - 🎯 **Smart Detection**: Analyzes file types, change patterns, and project context
+- 🔍 **Dry Run Mode**: Preview commit messages without making actual commits
+- 📋 **Change Summary**: Detailed statistics about your changes (lines added/deleted, file types)
 - ⚡ **Lightweight**: Shell script with minimal dependencies
 - 🛠️ **Configurable**: Extensive customization through CLI options and config files
 
@@ -96,6 +98,15 @@ claude-auto-commit -s -v
 # Custom prefix for hotfix
 claude-auto-commit -p "[HOTFIX]" -t fix
 
+# Preview message without committing
+claude-auto-commit --dry-run
+
+# Show detailed change statistics
+claude-auto-commit --summary
+
+# Combine options for detailed preview
+claude-auto-commit --dry-run --summary -v
+
 # Update tool
 claude-auto-commit --update
 ```
@@ -109,15 +120,18 @@ curl -fsSL https://claude-auto-commit.0xkaz.com/install.sh | bash
 
 ### Method 2: Manual Download
 ```bash
-# Download for your platform
-curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/latest/download/claude-auto-commit-$(uname -s)-$(uname -m)
+# Download the script
+curl -L -o claude-auto-commit https://github.com/0xkaz/claude-auto-commit/releases/latest/download/claude-auto-commit.sh
 chmod +x claude-auto-commit
 sudo mv claude-auto-commit /usr/local/bin/
 ```
 
-### Method 3: NPX (Node.js users)
+### Method 3: Clone and Install
 ```bash
-npx claude-auto-commit@latest
+git clone https://github.com/0xkaz/claude-auto-commit.git
+cd claude-auto-commit
+chmod +x src/claude-auto-commit.sh
+sudo ln -s $(pwd)/src/claude-auto-commit.sh /usr/local/bin/claude-auto-commit
 ```
 
 ## ⚙️ Configuration
@@ -141,6 +155,12 @@ git:
   auto_push: true
 ```
 
+## 🚀 What's New in v0.1.0
+
+- **Dry Run Mode**: Preview commit messages without committing using `--dry-run`
+- **Change Summary**: Get detailed statistics about your changes with `--summary`
+- **Push Confirmation**: Now prompts before pushing (use `-y` to skip)
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
@@ -154,14 +174,6 @@ This project is licensed under the MIT License - see the [LICENSE](./LICENSE) fi
 - [Anthropic](https://anthropic.com) for Claude CLI
 - [Conventional Commits](https://conventionalcommits.org) specification
 - Open source community for inspiration
-
-## 🤝 Contributing
-
-Contributions are welcome! Please read [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
 ---
 
