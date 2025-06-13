@@ -1,219 +1,134 @@
 # Contributing to Claude Auto-Commit
 
-Thank you for your interest in contributing to Claude Auto-Commit! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to Claude Auto-Commit! We welcome contributions from the community.
 
-## 🚀 Getting Started
+## 🤝 How to Contribute
 
-### Prerequisites
-- Git
-- Bash shell (macOS, Linux, WSL)
-- [Claude CLI](https://docs.anthropic.com/claude/cli) for testing
-- Basic knowledge of shell scripting
-
-### Development Setup
-1. Fork the repository
-2. Clone your fork locally:
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/claude-auto-commit.git
-   cd claude-auto-commit
-   ```
-3. Create a feature branch:
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-
-## 📝 How to Contribute
-
-### Reporting Bugs
-1. Search existing issues to avoid duplicates
-2. Use the bug report template
-3. Provide clear reproduction steps
-4. Include system information (OS, shell version, etc.)
+### Reporting Issues
+1. Check existing [issues](https://github.com/0xkaz/claude-auto-commit/issues) first
+2. Use the appropriate issue template
+3. Provide detailed information including:
+   - Version number
+   - Operating system
+   - Steps to reproduce
+   - Expected vs actual behavior
 
 ### Suggesting Features
-1. Search existing feature requests
+1. Check if the feature has already been requested
 2. Use the feature request template
-3. Explain the use case and benefits
-4. Consider implementation complexity
+3. Explain the use case and benefit
+4. Be open to discussion and feedback
 
-### Code Contributions
+### Submitting Code Changes
+
+#### Prerequisites
+- Git repository with some commit history for testing
+- Claude subscription (Pro, Max, or Team)
+- Claude CLI installed and configured
+- Bash shell (macOS, Linux, or WSL)
+
+#### Development Setup
+```bash
+# Clone the repository
+git clone https://github.com/0xkaz/claude-auto-commit.git
+cd claude-auto-commit
+
+# Make the script executable
+chmod +x src/claude-auto-commit.sh
+
+# Test the script
+./src/claude-auto-commit.sh --help
+```
+
+#### Testing Your Changes
+Before submitting a pull request, please test your changes:
+
+```bash
+# Test basic functionality
+./src/claude-auto-commit.sh --dry-run
+
+# Test with different options
+./src/claude-auto-commit.sh --dry-run --summary -l en -e
+
+# Test template system
+./src/claude-auto-commit.sh --save-template test "Test: {description}"
+./src/claude-auto-commit.sh --template test --dry-run
+
+# Test history analysis
+./src/claude-auto-commit.sh --analyze-history
+```
 
 #### Pull Request Process
-1. Ensure your code follows the style guide
-2. Add tests for new functionality
-3. Update documentation as needed
-4. Ensure all tests pass
-5. Create a clear PR description
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/my-feature`
+3. Make your changes
+4. Test thoroughly on your system
+5. Update documentation if needed
+6. Commit with descriptive messages
+7. Push to your fork
+8. Create a pull request using the template
 
-#### Code Style Guidelines
-- Use 4 spaces for indentation
-- Follow shell scripting best practices
-- Add comments for complex logic
+## 📝 Code Style Guidelines
+
+### Shell Script Best Practices
 - Use meaningful variable names
-- Keep functions focused and small
+- Add comments for complex logic
+- Quote variables properly: `"$VARIABLE"`
+- Use `set -e` for error handling where appropriate
+- Follow existing indentation (2 spaces)
 
-#### Testing
-- Test on multiple platforms (macOS, Linux)
-- Test with different Git repository states
-- Verify multi-language functionality
-- Test auto-update mechanism
-
-## 🌍 Multi-language Support
-
-### Adding New Languages
-1. Add language code to supported languages list
-2. Create translation files in appropriate format
-3. Update documentation
-4. Test with native speakers if possible
-
-### Translation Guidelines
-- Maintain technical accuracy
-- Respect cultural conventions
-- Keep messages concise
-- Follow platform-specific standards
-
-## 📚 Documentation
-
-### Writing Documentation
-- Use clear, concise language
-- Include practical examples
-- Keep README files up to date
-- Add inline comments for complex code
-
-### Documentation Structure
+### Commit Message Format
+We use conventional commits for consistency:
 ```
-docs/
-├── en/          # English documentation
-├── ja/          # Japanese documentation
-├── zh/          # Chinese documentation
-└── ...          # Other languages
+type(scope): description
+
+feat: add template system
+fix: resolve macOS compatibility issue
+docs: update installation instructions
 ```
 
-## 🔧 Technical Guidelines
+### Documentation
+- Update README.md for new features
+- Update help text in the script
+- Add examples for new functionality
+- Update CHANGELOG.md
 
-### Shell Scripting Best Practices
-- Use `set -e` for error handling
-- Quote variables to prevent word splitting
-- Use `local` for function variables
-- Implement proper error messages
-- Handle edge cases gracefully
+## 🧪 Testing
 
-### Auto-Update System
-- Maintain backward compatibility
-- Test update mechanisms thoroughly
-- Provide rollback functionality
-- Handle network failures gracefully
+### Manual Testing Checklist
+- [ ] Basic commit message generation
+- [ ] Dry run mode
+- [ ] Different language options
+- [ ] Template system
+- [ ] History analysis
+- [ ] Auto-update functionality
+- [ ] Error handling
 
-## 🎯 Project Structure
+### Platform Testing
+- [ ] macOS (Bash 3.x and 5.x)
+- [ ] Linux (various distributions)
+- [ ] Windows WSL
 
-```
-claude-auto-commit/
-├── src/                    # Source code
-│   └── claude-auto-commit.sh
-├── scripts/                # Build and utility scripts
-│   ├── install.sh
-│   ├── build.sh
-│   └── test.sh
-├── docs/                   # Multi-language documentation
-├── .github/                # GitHub workflows and templates
-├── README.md               # Main project documentation
-├── LICENSE                 # MIT License
-└── CONTRIBUTING.md         # This file
-```
+## 📋 Release Process
 
-## 🏷️ Commit Message Guidelines
+1. Update version in `src/claude-auto-commit.sh`
+2. Update CHANGELOG.md
+3. Create and test release
+4. Tag version: `git tag v0.0.x`
+5. Push tag: `git push origin v0.0.x`
+6. GitHub Actions will create the release
 
-We follow Conventional Commits specification:
+## 🤔 Questions?
 
-```
-<type>[optional scope]: <description>
-
-[optional body]
-
-[optional footer(s)]
-```
-
-### Types
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation changes
-- `style`: Code style changes
-- `refactor`: Code refactoring
-- `test`: Test additions or modifications
-- `chore`: Maintenance tasks
-
-### Examples
-```
-feat(i18n): add Spanish language support
-
-Add Spanish translations for all user-facing messages
-and update documentation accordingly.
-
-Closes #123
-```
-
-## 📋 Issue Templates
-
-### Bug Report
-- Description of the bug
-- Steps to reproduce
-- Expected behavior
-- Actual behavior
-- System information
-- Additional context
-
-### Feature Request
-- Feature description
-- Problem it solves
-- Proposed solution
-- Alternative solutions
-- Additional context
-
-## 🔍 Code Review Process
-
-### For Contributors
-- Respond to feedback promptly
-- Make requested changes
-- Keep discussions constructive
-- Test thoroughly before requesting review
-
-### For Reviewers
-- Be constructive and helpful
-- Focus on code quality and functionality
-- Consider security implications
-- Test changes when possible
-
-## 📊 Performance Considerations
-
-- Minimize external dependencies
-- Optimize for common use cases
-- Handle large repositories efficiently
-- Consider network latency for updates
-
-## 🔒 Security Guidelines
-
-- Never expose API keys or secrets
-- Validate all user inputs
-- Use secure download methods
-- Follow principle of least privilege
-
-## 🏆 Recognition
-
-Contributors will be recognized in:
-- Release notes for significant contributions
-- README acknowledgments
-- GitHub contributors list
-
-## 📞 Getting Help
-
-- Join discussions in GitHub Issues
-- Ask questions in appropriate channels
-- Reach out to maintainers for guidance
+- Check the [README](./README.md) first
+- Search [existing issues](https://github.com/0xkaz/claude-auto-commit/issues)
+- Create a new issue with the "question" template
+- Join discussions in the repository
 
 ## 📄 License
 
-By contributing, you agree that your contributions will be licensed under the same MIT License that covers the project.
+By contributing, you agree that your contributions will be licensed under the MIT License.
 
 ---
 
-Thank you for contributing to Claude Auto-Commit! Your efforts help make development workflows better for everyone. 🚀
+Thank you for helping make Claude Auto-Commit better! 🚀

@@ -5,6 +5,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub release](https://img.shields.io/github/release/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/releases)
 [![GitHub stars](https://img.shields.io/github/stars/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/network)
+[![GitHub issues](https://img.shields.io/github/issues/0xkaz/claude-auto-commit.svg)](https://github.com/0xkaz/claude-auto-commit/issues)
+[![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Linux-blue.svg)](https://github.com/0xkaz/claude-auto-commit)
+[![Shell](https://img.shields.io/badge/Shell-Bash-green.svg)](https://github.com/0xkaz/claude-auto-commit)
+[![Claude AI](https://img.shields.io/badge/Powered%20by-Claude%20AI-orange.svg)](https://claude.ai)
 
 Claude Auto-Commit is an open-source tool that automatically generates intelligent Git commit messages by analyzing your code changes using Claude AI. It integrates seamlessly into your development workflow and supports multiple languages and configurations.
 
