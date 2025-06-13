@@ -6,6 +6,46 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Handle version and help commands before importing main script
+const args = process.argv.slice(2);
+if (args.includes('--version')) {
+  console.log('Claude Auto Commit v0.1.3');
+  process.exit(0);
+}
+
+if (args.includes('--help') || args.includes('-h')) {
+  console.log(`
+Claude Auto Commit (SDK Version v0.1.3)
+
+Usage: claude-auto-commit [options]
+
+Options:
+  -l, --language <lang>       Language for commit message (en, ja)
+  -e, --emoji                Include emojis in commit message
+  -c, --conventional         Use Conventional Commits format
+  -t, --type <type>          Specify commit type (feat, fix, docs, etc.)
+  -d, --dry-run              Preview commit message without creating commit
+  -v, --verbose              Verbose output
+  -p, --push                 Push changes after commit
+  --template <name>          Use saved template
+  --save-template <name>     Save generated message as template (dry-run only)
+  --list-templates           List available templates
+  --version                  Show version information
+  -h, --help                 Show this help message
+
+Examples:
+  claude-auto-commit
+  claude-auto-commit -l ja -e -c
+  claude-auto-commit -t feat --push
+  claude-auto-commit --dry-run --save-template my-template
+  claude-auto-commit --template my-template
+
+Configuration:
+  Create ~/.claude-auto-commit/config.json for default settings
+  `);
+  process.exit(0);
+}
+
 // Import and run the main script
 const scriptPath = path.join(__dirname, '..', 'src', 'claude-auto-commit.js');
 
