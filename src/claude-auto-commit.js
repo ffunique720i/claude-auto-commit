@@ -519,12 +519,12 @@ function parseArgs() {
         })();
         return;
       case '--version':
-        console.log('Claude Auto Commit v0.1.2');
+        console.log('Claude Auto Commit v0.1.3');
         process.exit(0);
       case '-h':
       case '--help':
         console.log(`
-Claude Auto Commit (SDK Version v0.1.2)
+Claude Auto Commit (SDK Version v0.1.3)
 
 Usage: node src/claude-auto-commit.js [options]
 
